@@ -94,10 +94,8 @@ router.get('/search', async (req, res) => {
       .replace(/\s+/g, ' ')
       .trim()
 
-    // 2. Temporarily disabled external API fetching to prevent 502/CORS timeouts
-    // You can re-enable this later when the server capacity is increased.
+    // 2. Try Fetch from Google Custom Search API
     let imageUrl = null
-    /*
     try {
       const googleUrl = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&searchType=image&key=${process.env.GOOGLE_API_KEY}&cx=${process.env.GOOGLE_CX_ID}&num=1`
       const googleRes = await fetch(googleUrl, { signal: AbortSignal.timeout(3000) })
@@ -133,7 +131,6 @@ router.get('/search', async (req, res) => {
         console.log('Wikipedia API failed too...')
       }
     }
-    */
 
     if (imageUrl) {
       // Save successful image to Cache
@@ -143,7 +140,12 @@ router.get('/search', async (req, res) => {
 
     // 3. Fallback if no image found on Wikipedia or search failed
     // Use the hashing method based on query type to pick a premium image
-    const fallbackUrl = getFallbackImage(query, queryType)
+    let fallbackUrl = getFallbackImage(query, queryType)
+    
+    // Proxy Unsplash images to prevent client-side hotlinking blocks (403 Forbidden)
+    if (fallbackUrl.includes('unsplash.com')) {
+      fallbackUrl = `https://wsrv.nl/?url=${encodeURIComponent(fallbackUrl.replace('https://', ''))}`
+    }
     
     // Cache the fallback URL to database so we don't hit Wikipedia or recalculate hash next time
     await ImageCache.create({ query, imageUrl: fallbackUrl })
@@ -154,7 +156,10 @@ router.get('/search', async (req, res) => {
     // Return fallback on error
     const query = (req.query.q || '').trim().toLowerCase()
     const type = req.query.type || 'landmark'
-    const fallbackUrl = getFallbackImage(query, type)
+    let fallbackUrl = getFallbackImage(query, type)
+    if (fallbackUrl.includes('unsplash.com')) {
+      fallbackUrl = `https://wsrv.nl/?url=${encodeURIComponent(fallbackUrl.replace('https://', ''))}`
+    }
     res.json({ imageUrl: fallbackUrl })
   }
 })

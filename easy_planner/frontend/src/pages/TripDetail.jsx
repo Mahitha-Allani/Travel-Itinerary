@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
 import api from '../api/axios.js'
 
-const defaultImg = 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1200&q=80'
+const defaultImg = 'https://wsrv.nl/?url=images.unsplash.com/photo-1524492412937-b28074a5d7da%3Fw%3D1200%26q%3D80'
 
 // 20 unique luxury hotel images — each hotel gets a unique one via name hashing
 const hotelImages = [
@@ -61,8 +61,12 @@ function hashName(str) {
   }
   return Math.abs(hash)
 }
-function getHotelImage(name) { return hotelImages[hashName(name) % hotelImages.length] }
-function getRestaurantImage(name) { return restaurantImages[hashName(name) % restaurantImages.length] }
+function proxyUnsplash(url) {
+  return `https://wsrv.nl/?url=${encodeURIComponent(url.replace('https://', ''))}`
+}
+
+function getHotelImage(name) { return proxyUnsplash(hotelImages[hashName(name) % hotelImages.length]) }
+function getRestaurantImage(name) { return proxyUnsplash(restaurantImages[hashName(name) % restaurantImages.length]) }
 
 const tripTypeIcon = { Solo: '🧳', Friends: '👥', Family: '👨‍👩‍👧‍👦', Professional: '💼' }
 
