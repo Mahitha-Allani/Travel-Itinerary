@@ -31,16 +31,16 @@ const restaurantFallbacks = [
 ]
 
 const landmarkFallbacks = [
-  'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&q=80', // Taj Mahal
-  'https://images.unsplash.com/photo-1506461883276-594a12b11cc3?w=600&q=80', // Indian Temple
-  'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80', // Palace facade
-  'https://images.unsplash.com/photo-1548013146-72479768bada?w=600&q=80', // Fort
-  'https://images.unsplash.com/photo-1598305372100-877abba771ca?w=600&q=80', // India Gate
-  'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=600&q=80', // Ghats Varanasi
-  'https://images.unsplash.com/photo-1561361513-2d000a50f0db?w=600&q=80', // Indian street
-  'https://images.unsplash.com/photo-1477584305590-38772bfc1e3d?w=600&q=80', // Hawa Mahal
-  'https://images.unsplash.com/photo-1585135497273-1a86b09fe707?w=600&q=80', // Kerala backwaters
-  'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600&q=80'  // Goa Beach
+  'https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?w=600&q=80', // Generic green landscape
+  'https://images.unsplash.com/photo-1623941424560-6101683d733e?w=600&q=80', // Beautiful coastal/beach sunset
+  'https://images.unsplash.com/photo-1571536802807-3cab2f52c10b?w=600&q=80', // Generic lush mountains
+  'https://images.unsplash.com/photo-1534008897995-27a23e859048?w=600&q=80', // Generic street aesthetic
+  'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=600&q=80', // Serene lake/river view
+  'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=600&q=80', // Tropical palm trees
+  'https://images.unsplash.com/photo-1555026938-348e025b6ec3?w=600&q=80', // Scenic nature aesthetic
+  'https://images.unsplash.com/photo-1498855926480-d98e83099315?w=600&q=80', // Beautiful horizon/clouds
+  'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&q=80', // Adventure/journey road
+  'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&q=80'  // Tranquil waters/boat
 ]
 
 function getHash(str) {

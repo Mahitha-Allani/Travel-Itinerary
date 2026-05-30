@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
 import api from '../api/axios.js'
 
-const defaultImg = 'https://wsrv.nl/?url=images.unsplash.com/photo-1524492412937-b28074a5d7da%3Fw%3D1200%26q%3D80'
+const defaultImg = 'https://wsrv.nl/?url=images.unsplash.com/photo-1436491865332-7a61a109cc05%3Fw%3D1200%26q%3D80' // Neutral airplane/travel background
 
 // 20 unique luxury hotel images — each hotel gets a unique one via name hashing
 const hotelImages = [
