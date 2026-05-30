@@ -18,8 +18,7 @@ const seedReviews = async () => {
     ])
   }
 }
-seedReviews()
-
+mongoose.connection.once('open', seedReviews) 
 // GET /api/reviews — public
 router.get('/', async (req, res) => {
   try {
