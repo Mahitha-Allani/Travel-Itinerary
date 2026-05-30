@@ -5,35 +5,35 @@ import Footer from '../components/Footer.jsx'
 import api from '../api/axios.js'
 
 const cityImages = {
-  Mumbai:     'https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?w=600&q=80',
-  Delhi:      'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80',
-  Jaipur:     'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&q=80',
-  Agra:       'https://images.unsplash.com/photo-1548013146-72479768bada?w=600&q=80',
-  Goa:        'https://images.unsplash.com/photo-1587922546307-776227941871?w=600&q=80',
-  Kolkata:    'https://images.unsplash.com/photo-1558431382-27e303142255?w=600&q=80',
-  Hyderabad:  'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80',
-  Chennai:    'https://images.unsplash.com/photo-1582510003544-4d00b7f7415e?w=600&q=80',
-  Udaipur:    'https://images.unsplash.com/photo-1615861111624-9b55239a5124?w=600&q=80',
-  Shimla:     'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=600&q=80',
-  Darjeeling: 'https://images.unsplash.com/photo-1544634076-a90160ddf44e?w=600&q=80',
-  Kochi:      'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&q=80',
-  Mysore:     'https://images.unsplash.com/photo-1600100397608-f010f419b9b1?w=600&q=80',
-  Leh:        'https://images.unsplash.com/photo-1580210741270-22c608f6d659?w=600&q=80',
-  Manali:     'https://images.unsplash.com/photo-1626015365107-39d78616aed5?w=600&q=80',
-  Rishikesh:  'https://images.unsplash.com/photo-1590766940554-638c4d29e4b6?w=600&q=80',
-  Jodhpur:    'https://images.unsplash.com/photo-1599059588523-28db30f30560?w=600&q=80',
-  Patna:      'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=600&q=80',
-  Varanasi:   'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=600&q=80',
-  Lucknow:    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&q=80',
-  Pune:       'https://images.unsplash.com/photo-1572782252655-9c8771392601?w=600&q=80',
-  Ahmedabad:  'https://images.unsplash.com/photo-1569245004289-a7197c764f94?w=600&q=80',
+  mumbai:     'https://wsrv.nl/?url=images.unsplash.com/photo-1529253355930-ddbe423a2ac7%3Fw%3D600%26q%3D80',
+  delhi:      'https://wsrv.nl/?url=images.unsplash.com/photo-1587474260584-136574528ed5%3Fw%3D600%26q%3D80',
+  jaipur:     'https://wsrv.nl/?url=images.unsplash.com/photo-1477584305590-38772bfc1e3d%3Fw%3D600%26q%3D80', // Hawa Mahal
+  agra:       'https://wsrv.nl/?url=images.unsplash.com/photo-1524492412937-b28074a5d7da%3Fw%3D600%26q%3D80', // Taj Mahal
+  goa:        'https://wsrv.nl/?url=images.unsplash.com/photo-1587922546307-776227941871%3Fw%3D600%26q%3D80',
+  kolkata:    'https://wsrv.nl/?url=images.unsplash.com/photo-1558431382-27e303142255%3Fw%3D600%26q%3D80',
+  hyderabad:  'https://wsrv.nl/?url=images.unsplash.com/photo-1564507592333-c60657eea523%3Fw%3D600%26q%3D80',
+  chennai:    'https://wsrv.nl/?url=images.unsplash.com/photo-1582510003544-4d00b7f7415e%3Fw%3D600%26q%3D80',
+  udaipur:    'https://wsrv.nl/?url=images.unsplash.com/photo-1615861111624-9b55239a5124%3Fw%3D600%26q%3D80',
+  shimla:     'https://wsrv.nl/?url=images.unsplash.com/photo-1626621341517-bbf3d9990a23%3Fw%3D600%26q%3D80',
+  darjeeling: 'https://wsrv.nl/?url=images.unsplash.com/photo-1544634076-a90160ddf44e%3Fw%3D600%26q%3D80',
+  kochi:      'https://wsrv.nl/?url=images.unsplash.com/photo-1602216056096-3b40cc0c9944%3Fw%3D600%26q%3D80',
+  mysore:     'https://wsrv.nl/?url=images.unsplash.com/photo-1600100397608-f010f419b9b1%3Fw%3D600%26q%3D80',
+  leh:        'https://wsrv.nl/?url=images.unsplash.com/photo-1580210741270-22c608f6d659%3Fw%3D600%26q%3D80',
+  manali:     'https://wsrv.nl/?url=images.unsplash.com/photo-1626015365107-39d78616aed5%3Fw%3D600%26q%3D80',
+  rishikesh:  'https://wsrv.nl/?url=images.unsplash.com/photo-1590766940554-638c4d29e4b6%3Fw%3D600%26q%3D80',
+  jodhpur:    'https://wsrv.nl/?url=images.unsplash.com/photo-1599059588523-28db30f30560%3Fw%3D600%26q%3D80',
+  patna:      'https://wsrv.nl/?url=images.unsplash.com/photo-1590050752117-238cb0fb12b1%3Fw%3D600%26q%3D80',
+  varanasi:   'https://wsrv.nl/?url=images.unsplash.com/photo-1561361513-2d000a50f0dc%3Fw%3D600%26q%3D80',
+  lucknow:    'https://wsrv.nl/?url=images.unsplash.com/photo-1578662996442-48f60103fc96%3Fw%3D600%26q%3D80',
+  pune:       'https://wsrv.nl/?url=images.unsplash.com/photo-1572782252655-9c8771392601%3Fw%3D600%26q%3D80',
+  ahmedabad:  'https://wsrv.nl/?url=images.unsplash.com/photo-1569245004289-a7197c764f94%3Fw%3D600%26q%3D80',
 }
-const defaultImg = 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&q=80'
+const defaultImg = 'https://wsrv.nl/?url=images.unsplash.com/photo-1436491865332-7a61a109cc05%3Fw%3D600%26q%3D80'
 const tripTypeIcon = { Solo: '🧳', Friends: '👥', Family: '👨‍👩‍👧‍👦', Professional: '💼' }
 
 function TripCard({ trip, onDelete }) {
   const navigate = useNavigate()
-  const img = cityImages[trip.destination] || defaultImg
+  const img = cityImages[trip.destination?.toLowerCase()] || defaultImg
 
   const fmt = v => (v === 'N/A' || v == null) ? 'N/A' : `₹${Number(v).toLocaleString('en-IN')}`
 

@@ -22,7 +22,7 @@ function StarRating({ rating, onClick }) {
 }
 
 function DynamicCityCard({ name, onClick }) {
-  const [img, setImg] = useState('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&q=80')
+  const [img, setImg] = useState('https://wsrv.nl/?url=images.unsplash.com/photo-1436491865332-7a61a109cc05%3Fw%3D600%26q%3D80')
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

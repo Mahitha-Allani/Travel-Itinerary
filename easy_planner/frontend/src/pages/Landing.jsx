@@ -4,14 +4,14 @@ import { useAuth } from '../context/AuthContext.jsx'
 import GoogleAuthModal from '../components/GoogleAuthModal.jsx'
 
 const cities = [
-  { name: 'Mumbai',    img: 'https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?w=600&q=80' },
-  { name: 'Jaipur',   img: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&q=80' },
-  { name: 'Agra',     img: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=600&q=80' },
-  { name: 'Goa',      img: 'https://images.unsplash.com/photo-1587922546307-776227941871?w=600&q=80' },
-  { name: 'Kerala',   img: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&q=80' },
-  { name: 'Delhi',    img: 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80' },
-  { name: 'Kolkata',  img: 'https://images.unsplash.com/photo-1558431382-27e303142255?w=600&q=80' },
-  { name: 'Hyderabad', img: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80' },]
+  { name: 'Mumbai',    img: 'https://wsrv.nl/?url=images.unsplash.com/photo-1529253355930-ddbe423a2ac7%3Fw%3D600%26q%3D80' },
+  { name: 'Jaipur',    img: 'https://wsrv.nl/?url=images.unsplash.com/photo-1477584305590-38772bfc1e3d%3Fw%3D600%26q%3D80' },
+  { name: 'Agra',      img: 'https://wsrv.nl/?url=images.unsplash.com/photo-1524492412937-b28074a5d7da%3Fw%3D600%26q%3D80' },
+  { name: 'Goa',       img: 'https://wsrv.nl/?url=images.unsplash.com/photo-1587922546307-776227941871%3Fw%3D600%26q%3D80' },
+  { name: 'Kerala',    img: 'https://wsrv.nl/?url=images.unsplash.com/photo-1602216056096-3b40cc0c9944%3Fw%3D600%26q%3D80' },
+  { name: 'Delhi',     img: 'https://wsrv.nl/?url=images.unsplash.com/photo-1587474260584-136574528ed5%3Fw%3D600%26q%3D80' },
+  { name: 'Kolkata',   img: 'https://wsrv.nl/?url=images.unsplash.com/photo-1558431382-27e303142255%3Fw%3D600%26q%3D80' },
+  { name: 'Hyderabad', img: 'https://wsrv.nl/?url=images.unsplash.com/photo-1564507592333-c60657eea523%3Fw%3D600%26q%3D80' },]
 const strip = [...cities, ...cities]
 
 export default function Landing() {
