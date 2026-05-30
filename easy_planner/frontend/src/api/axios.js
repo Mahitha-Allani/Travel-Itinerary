@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const api = axios.create({ baseURL: '/api' })
+// Use the live Render deployment for the API
+const api = axios.create({ baseURL: 'https://travel-itinerary-401f.onrender.com/api' })
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')

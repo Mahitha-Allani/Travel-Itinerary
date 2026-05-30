@@ -23,8 +23,8 @@ Easy Planner (branded **Voyara**) is a full-stack travel planning application bu
 
 | Service | URL |
 |---------|-----|
-| Frontend (Vercel) | https://easy-planner.vercel.app |
-| Backend API (Render) | https://easy-planner-backend.onrender.com |
+| Frontend (Vercel) | *Pending Deployment* |
+| Backend API (Render) | https://travel-itinerary-401f.onrender.com |
 
 > **Note:** The backend is on Render's free tier and may take ~30 seconds to respond on the first request after a period of inactivity (cold start). Subsequent requests are fast.
 
@@ -88,23 +88,24 @@ Email/password auth with bcrypt password hashing and 7-day JWT sessions. Google 
 
 ```
 easy-planner/
-├── backend/               # Express.js REST API
-│   ├── config/
-│   │   ├── db.js          # MongoDB connection
-│   │   └── data.js        # City costs, places, activities data
-│   ├── middleware/
-│   │   └── auth.js        # JWT protect middleware
-│   ├── models/            # Mongoose schemas
-│   ├── routes/            # Express route handlers
-│   └── server.js          # Entry point
-│
-├── frontend/              # React + Vite SPA
-│   ├── src/
-│   │   ├── api/           # Axios instance
-│   │   ├── components/    # Chatbot, Navbar, Footer
-│   │   ├── context/       # AuthContext
-│   │   └── pages/         # All page components
-│   └── vite.config.js
+├── easy_planner/
+│   ├── backend/               # Express.js REST API
+│   │   ├── config/
+│   │   │   ├── db.js          # MongoDB connection
+│   │   │   └── data.js        # City costs, places, activities data
+│   │   ├── middleware/
+│   │   │   └── auth.js        # JWT protect middleware
+│   │   ├── models/            # Mongoose schemas
+│   │   ├── routes/            # Express route handlers
+│   │   └── server.js          # Entry point
+│   │
+│   └── frontend/              # React + Vite SPA
+│       ├── src/
+│       │   ├── api/           # Axios instance
+│       │   ├── components/    # Chatbot, Navbar, Footer
+│       │   ├── context/       # AuthContext
+│       │   └── pages/         # All page components
+│       └── vite.config.js
 │
 └── README.md              # This file
 ```
@@ -137,14 +138,14 @@ easy-planner/
 ### 1 — Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/easy-planner.git
-cd easy-planner
+git clone https://github.com/Mahitha-Allani/Travel-Itinerary.git
+cd Travel-Itinerary
 ```
 
 ### 2 — Start the backend
 
 ```bash
-cd backend
+cd easy_planner/backend
 npm install
 ```
 
@@ -168,9 +169,11 @@ npm run dev
 Open a second terminal:
 
 ```bash
-cd frontend
+cd ../frontend
 npm install
-echo "VITE_API_URL=http://localhost:5000/api" > .env
+```
+
+```bash
 npm run dev
 # App running on http://localhost:5173
 ```
@@ -190,13 +193,13 @@ Open http://localhost:5173 in your browser.
 
 | Setting | Value |
 |---------|-------|
-| Root Directory | `backend` |
+| Root Directory | `easy_planner/backend` |
 | Build Command | `npm install` |
 | Start Command | `node server.js` |
 
-5. Add environment variables (MONGO_URI, JWT_SECRET, GROQ_API_KEY)
+5. Add environment variables (MONGO_URI, JWT_SECRET, GROQ_API_KEY, GOOGLE_API_KEY, GOOGLE_CX_ID)
 6. **Important:** In MongoDB Atlas → Network Access → Add `0.0.0.0/0` (allow all IPs, since Render uses dynamic IPs)
-7. Deploy → your API will be at `https://easy-planner-backend.onrender.com`
+7. Deploy → your API will be at `https://travel-itinerary-401f.onrender.com`
 
 ### Frontend → Vercel
 
@@ -207,15 +210,12 @@ Open http://localhost:5173 in your browser.
 
 | Setting | Value |
 |---------|-------|
-| Root Directory | `frontend` |
+| Root Directory | `easy_planner/frontend` |
 | Framework Preset | Vite |
 | Build Command | `npm run build` |
 | Output Directory | `dist` |
 
-5. Add environment variable:
-   ```
-   VITE_API_URL = https://easy-planner-backend.onrender.com/api
-   ```
+5. The API URL is hardcoded in `axios.js`, so you do not need to add `VITE_API_URL` to Vercel environment variables anymore!
 6. Create `frontend/vercel.json` for React Router:
    ```json
    {
@@ -226,13 +226,13 @@ Open http://localhost:5173 in your browser.
 
 ### After Both Are Deployed
 
-Update `backend/server.js` CORS to allow your Vercel domain:
+Update `easy_planner/backend/server.js` CORS to allow your Vercel domain:
 
 ```js
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'https://easy-planner.vercel.app'
+    'https://your-vercel-app-url.vercel.app'
   ],
   credentials: true
 }))
@@ -253,7 +253,8 @@ Commit and push — Render auto-redeploys.
 | `JWT_SECRET` | Yes | Secret key for signing JWT tokens |
 | `GROQ_API_KEY` | Optional | Groq API key for AI features |
 | `OPENAI_API_KEY` | Optional | OpenAI fallback if no Groq key |
-| `GOOGLE_API_KEY` | Optional | Google Places for city images |
+| `GOOGLE_API_KEY` | Optional | Google Custom Search API key for city images |
+| `GOOGLE_CX_ID` | Optional | Google Custom Search Engine ID |
 
 ### Frontend (`frontend/.env`)
 
@@ -297,4 +298,7 @@ POST   /api/reviews           Submit a review
 
 ## Live Deployment Links
 
-*App** | https://easy-planner.vercel.app |
+| Service | URL |
+|---------|-----|
+| Frontend | *Pending Deployment* |
+| Backend | https://travel-itinerary-401f.onrender.com |
