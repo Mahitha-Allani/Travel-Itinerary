@@ -23,7 +23,7 @@ Easy Planner (branded **Voyara**) is a full-stack travel planning application bu
 
 | Service | URL |
 |---------|-----|
-| Frontend (Vercel) | *Pending Deployment* |
+| Frontend (Vercel) | https://travel-itinerary-flame.vercel.app |
 | Backend API (Render) | https://travel-itinerary-401f.onrender.com |
 
 > **Note:** The backend is on Render's free tier and may take ~30 seconds to respond on the first request after a period of inactivity (cold start). Subsequent requests are fast.
@@ -232,7 +232,7 @@ Update `easy_planner/backend/server.js` CORS to allow your Vercel domain:
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'https://your-vercel-app-url.vercel.app'
+    'https://travel-itinerary-flame.vercel.app'
   ],
   credentials: true
 }))
@@ -300,5 +300,5 @@ POST   /api/reviews           Submit a review
 
 | Service | URL |
 |---------|-----|
-| Frontend | *Pending Deployment* |
+| Frontend | https://travel-itinerary-flame.vercel.app |
 | Backend | https://travel-itinerary-401f.onrender.com |

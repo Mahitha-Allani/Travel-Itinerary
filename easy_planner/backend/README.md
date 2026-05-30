@@ -206,8 +206,9 @@ PORT=5000
 MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/easy_planner
 JWT_SECRET=your_long_random_secret_string_here
 GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-GOOGLE_API_KEY=AIzaxxxxxxxxxxxxxxxxxxxxxxxxxx    
-
+GOOGLE_API_KEY=AIzaxxxxxxxxxxxxxxxxxxxxxxxxxx
+GOOGLE_CX_ID=your_custom_search_engine_id
+```
 
 ---
 
@@ -216,8 +217,8 @@ GOOGLE_API_KEY=AIzaxxxxxxxxxxxxxxxxxxxxxxxxxx
 ### Step 1 — Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/easy-planner.git
-cd easy-planner/backend
+git clone https://github.com/Mahitha-Allani/Travel-Itinerary.git
+cd Travel-Itinerary/easy_planner/backend
 ```
 
 ### Step 2 — Install dependencies
@@ -336,10 +337,10 @@ Go to https://render.com and sign up (free tier available).
 
 | Setting | Value |
 |---------|-------|
-| Name | `easy-planner-backend` |
+| Name | `travel-itinerary` |
 | Region | Singapore (closest to India) |
 | Branch | `main` |
-| Root Directory | `backend` |
+| Root Directory | `easy_planner/backend` |
 | Runtime | Node |
 | Build Command | `npm install` |
 | Start Command | `node server.js` |
@@ -353,6 +354,8 @@ PORT          = (leave blank — Render sets this automatically)
 MONGO_URI     = mongodb+srv://...
 JWT_SECRET    = your_secret_here
 GROQ_API_KEY  = gsk_...
+GOOGLE_API_KEY = AIza...
+GOOGLE_CX_ID  = your_cx_id
 ```
 
 > Do NOT set PORT manually. Render injects its own PORT value.
@@ -365,7 +368,7 @@ Before deploying, update `server.js` CORS config:
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'https://your-frontend.vercel.app'   // add your Vercel URL here
+    'https://travel-itinerary-flame.vercel.app'
   ],
   credentials: true
 }))
@@ -378,15 +381,15 @@ Click **Create Web Service**. Render will:
 2. Run `npm install`
 3. Start the server with `node server.js`
 
-Your backend will be live at: `https://easy-planner-backend.onrender.com`
+Your backend will be live at: `https://travel-itinerary-401f.onrender.com`
 
 ### Step 7 — Verify deployment
 
 ```bash
-curl https://easy-planner-backend.onrender.com/
+curl https://travel-itinerary-401f.onrender.com/
 # → {"message":"Easy Planner API running"}
 
-curl https://easy-planner-backend.onrender.com/api/cities
+curl https://travel-itinerary-401f.onrender.com/api/cities
 # → ["Mumbai","Delhi",...]
 ```
 
@@ -398,8 +401,9 @@ curl https://easy-planner-backend.onrender.com/api/cities
 
 ---
 
-## Live Backend URL
+## Live URLs
 
-```
-https://easy-planner-backend.onrender.com
-```
+| Service | URL |
+|---------|-----|
+| Backend (Render) | https://travel-itinerary-401f.onrender.com |
+| Frontend (Vercel) | https://travel-itinerary-flame.vercel.app |

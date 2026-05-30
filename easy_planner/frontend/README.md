@@ -162,7 +162,7 @@ Each page manages its own state with `useState` and `useEffect`. Examples:
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+  baseURL: 'https://travel-itinerary-401f.onrender.com/api'
 })
 
 // Automatically attach JWT token to every request
@@ -197,19 +197,12 @@ Every page imports this `api` instance instead of raw axios. This means:
 
 ## Environment Variables
 
-Create a `.env` file in the `frontend/` folder:
+For production, the API URL is hardcoded directly in `axios.js` pointing to the live Render backend:
 
 ```env
-VITE_API_URL=http://localhost:5000/api
+# No VITE_API_URL needed — already hardcoded in src/api/axios.js:
+# https://travel-itinerary-401f.onrender.com/api
 ```
-
-For production (Vercel), set:
-
-```env
-VITE_API_URL=https://easy-planner-backend.onrender.com/api
-```
-
-**Important:** All Vite environment variables must start with `VITE_` to be accessible in the browser.
 
 ---
 
@@ -223,7 +216,8 @@ VITE_API_URL=https://easy-planner-backend.onrender.com/api
 ### Step 1 — Navigate to frontend folder
 
 ```bash
-cd easy-planner/frontend
+git clone https://github.com/Mahitha-Allani/Travel-Itinerary.git
+cd Travel-Itinerary/easy_planner/frontend
 ```
 
 ### Step 2 — Install dependencies
@@ -232,13 +226,7 @@ cd easy-planner/frontend
 npm install
 ```
 
-### Step 3 — Create `.env` file
-
-```bash
-echo "VITE_API_URL=http://localhost:5000/api" > .env
-```
-
-### Step 4 — Start the dev server
+### Step 3 — Start the dev server
 
 ```bash
 npm run dev
@@ -364,20 +352,14 @@ Go to https://vercel.com and sign up (free tier is sufficient).
 | Setting | Value |
 |---------|-------|
 | Framework Preset | Vite |
-| Root Directory | `frontend` |
+| Root Directory | `easy_planner/frontend` |
 | Build Command | `npm run build` |
 | Output Directory | `dist` |
 | Install Command | `npm install` |
 
-### Step 4 — Add Environment Variables
+### Step 4 — Environment Variables
 
-In the Vercel dashboard → **Settings** → **Environment Variables**, add:
-
-```
-VITE_API_URL = https://easy-planner-backend.onrender.com/api
-```
-
-Make sure to add it for all three environments: Production, Preview, Development.
+No environment variables needed in Vercel! The API URL is already hardcoded in `src/api/axios.js` pointing to the live Render backend.
 
 ### Step 5 — Deploy
 
@@ -387,7 +369,7 @@ Click **Deploy**. Vercel will:
 3. Run `npm run build` (creates `dist/`)
 4. Serve the static files globally via Vercel's CDN
 
-Your frontend will be live at: `https://easy-planner.vercel.app`
+Your frontend will be live at: `https://travel-itinerary-flame.vercel.app`
 
 ### Step 6 — Fix React Router on Vercel
 
@@ -411,7 +393,7 @@ After you get your Vercel URL, go back to `backend/server.js` and add it to the 
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'https://easy-planner.vercel.app'
+    'https://travel-itinerary-flame.vercel.app'
   ],
   credentials: true
 }))
@@ -425,8 +407,9 @@ Open your Vercel URL → register a new account → create a trip → everything
 
 ---
 
-## Live Frontend URL
+## Live URLs
 
-```
-https://easy-planner.vercel.app
-```
+| Service | URL |
+|---------|-----|
+| Frontend (Vercel) | https://travel-itinerary-flame.vercel.app |
+| Backend (Render) | https://travel-itinerary-401f.onrender.com |
