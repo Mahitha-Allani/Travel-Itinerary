@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import Review from '../models/Review.js'
 import protect from '../middleware/auth.js'
-
+import mongoose from 'mongoose'
 const router = Router()
 
 // Seed default reviews if none exist
