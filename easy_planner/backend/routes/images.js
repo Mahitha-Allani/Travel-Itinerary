@@ -94,11 +94,13 @@ router.get('/search', async (req, res) => {
       .replace(/\s+/g, ' ')
       .trim()
 
-    // 2. Try Fetch from Google Custom Search API
+    // 2. Temporarily disabled external API fetching to prevent 502/CORS timeouts
+    // You can re-enable this later when the server capacity is increased.
     let imageUrl = null
+    /*
     try {
       const googleUrl = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&searchType=image&key=${process.env.GOOGLE_API_KEY}&cx=${process.env.GOOGLE_CX_ID}&num=1`
-      const googleRes = await fetch(googleUrl)
+      const googleRes = await fetch(googleUrl, { signal: AbortSignal.timeout(3000) })
       const googleData = await googleRes.json()
 
       if (googleRes.ok && googleData.items && googleData.items.length > 0) {
@@ -114,7 +116,7 @@ router.get('/search', async (req, res) => {
         const searchQuery = encodeURIComponent(`${cleanedQuery} India`)
         const wikiUrl = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${searchQuery}&prop=pageimages&format=json&pithumbsize=600&gsrlimit=1`
         
-        const wikiRes = await fetch(wikiUrl)
+        const wikiRes = await fetch(wikiUrl, { signal: AbortSignal.timeout(3000) })
         const wikiData = await wikiRes.json()
 
         if (wikiRes.ok && wikiData.query?.pages) {
@@ -124,13 +126,14 @@ router.get('/search', async (req, res) => {
 
           const isNoiseImage = wikiImage && wikiImage.toLowerCase().match(/(logo|map|flag|emblem|icon|shield|symbol|\.svg)/i)
           if (wikiImage && !isNoiseImage) {
-            imageUrl = wikiImage
+            imageUrl = wikiImage.replace('http://', 'https://')
           }
         }
       } catch (e) {
         console.log('Wikipedia API failed too...')
       }
     }
+    */
 
     if (imageUrl) {
       // Save successful image to Cache
