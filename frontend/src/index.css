@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Lato", sans-serif;
+  --font-heading: "Playfair Display", serif;
+  
+  --color-burgundy-50: #fcf6f6;
+  --color-burgundy-100: #f7ecec;
+  --color-burgundy-200: #eed5d5;
+  --color-burgundy-300: #e2b3b3;
+  --color-burgundy-400: #d18787;
+  --color-burgundy-500: #bd5c5c;
+  --color-burgundy-600: #a74242;
+  --color-burgundy-700: #8b3434;
+  --color-burgundy-800: #742e2e;
+  --color-burgundy-900: #612a2a;
+  
+  --color-creme-50: #fdfbf7;
+  --color-creme-100: #faf4ea;
+  --color-creme-200: #f3e6d1;
+  --color-creme-300: #ead2af;
+  --color-creme-400: #e0b885;
+  --color-creme-500: #d8a065;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+@keyframes scrollUp {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+.scroll-track {
+  animation: scrollUp 30s linear infinite;
+}
+
+.scroll-track:hover {
+  animation-play-state: paused;
+}
