@@ -6,6 +6,51 @@ import { sendWelcomeEmail } from '../utils/email.js'
 
 const router = Router()
 
+// GET /api/auth/test-email (For diagnostic testing)
+router.get('/test-email', async (req, res) => {
+  try {
+    const { email } = req.query
+    if (!email) return res.status(400).json({ error: 'Email query parameter is required' })
+
+    const user = process.env.EMAIL_USER
+    const pass = process.env.EMAIL_PASS
+
+    if (!user || !pass) {
+      return res.status(500).json({ 
+        error: 'Environment variables EMAIL_USER or EMAIL_PASS are missing on the server.',
+        EMAIL_USER_PRESENT: !!user,
+        EMAIL_PASS_PRESENT: !!pass
+      })
+    }
+
+    const nodemailer = (await import('nodemailer')).default
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: { user, pass }
+    })
+
+    await transporter.verify() // Verify connection configuration
+
+    const mailOptions = {
+      from: `"Voyara Diagnostic" <${user}>`,
+      to: email,
+      subject: 'Voyara SMTP Diagnostic Test 🛡️',
+      text: 'If you are reading this, your Voyara SMTP email connection is configured 100% correctly!'
+    }
+
+    const info = await transporter.sendMail(mailOptions)
+    res.json({ success: true, message: 'SMTP is working perfectly! Email sent.', info })
+  } catch (err) {
+    res.status(500).json({ 
+      success: false, 
+      error: err.message, 
+      details: err,
+      EMAIL_USER: process.env.EMAIL_USER ? `${process.env.EMAIL_USER.slice(0, 3)}...` : 'not set',
+      EMAIL_PASS_LENGTH: process.env.EMAIL_PASS ? process.env.EMAIL_PASS.length : 0
+    })
+  }
+})
+
 const generateToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' })
 
