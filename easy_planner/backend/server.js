@@ -15,7 +15,25 @@ const PORT = process.env.PORT || 5000
 
 connectDB()
 
-app.use(cors({ origin: ['http://localhost:5173', 'https://travel-itinerary-flame.vercel.app'], credentials: true }))
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://travel-itinerary-flame.vercel.app'
+]
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true)
+    const isAllowed = allowedOrigins.includes(origin) || 
+                      origin.endsWith('.vercel.app') || 
+                      origin.startsWith('http://localhost')
+    if (isAllowed) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  credentials: true
+}))
 app.use(express.json({ limit: '50mb' }))
 
 app.use('/api/auth',    authRoutes)
