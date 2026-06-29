@@ -1,11 +1,38 @@
 import { Router } from 'express'
 import { costs, nearbyPlaces } from '../config/data.js'
 
+const ALL_INDIA_CITIES = [
+  'Agartala','Agra','Ahmedabad','Ahmednagar','Aizawl','Ajmer','Akola','Aligarh','Allahabad',
+  'Alwar','Ambala','Amravati','Amritsar','Anantapur','Aurangabad','Bangalore','Bareilly',
+  'Belgaum','Bhavnagar','Bhilai','Bhiwandi','Bhopal','Bhubaneswar','Bikaner','Bilaspur',
+  'Chandigarh','Chennai','Coimbatore','Cuttack','Dahod','Daman','Davangere','Dehradun',
+  'Delhi','Dhanbad','Dharwad','Dibrugarh','Durgapur','Erode','Faridabad','Gandhinagar',
+  'Gangtok','Gaya','Ghaziabad','Gorakhpur','Gulbarga','Guntur','Gurgaon','Guwahati',
+  'Gwalior','Haridwar','Hubli','Hyderabad','Imphal','Indore','Itanagar','Jabalpur',
+  'Jaipur','Jalandhar','Jalgaon','Jammu','Jamnagar','Jamshedpur','Jodhpur','Jorhat',
+  'Junagadh','Kakinada','Kalyan','Kanpur','Karnal','Kochi','Kohima','Kolkata','Kollam',
+  'Kota','Kozhikode','Kumbakonam','Leh','Lucknow','Ludhiana','Madurai','Mangalore',
+  'Manali','Mathura','Meerut','Moradabad','Mumbai','Mussoorie','Mysore','Nagpur','Nashik',
+  'Navi Mumbai','Nellore','Noida','Ooty','Panchkula','Panipat','Patna','Pondicherry',
+  'Port Blair','Pune','Puri','Raipur','Rajkot','Rajahmundry','Ranchi','Rishikesh',
+  'Rohtak','Rourkela','Salem','Saharanpur','Shillong','Shimla','Siliguri','Silvassa',
+  'Solapur','Srinagar','Surat','Thane','Thiruvananthapuram','Thrissur','Tiruchirapalli',
+  'Tirunelveli','Udaipur','Ujjain','Vadodara','Varanasi','Vijayawada','Visakhapatnam',
+  'Vellore','Warangal','Amritsar','Darjeeling','Goa','Kota','Jodhpur','Lakshadweep',
+  'Diu','Karaikudi','Tirupati','Nainital','Mussoorie','Munnar','Kodaikanal','Mahabaleshwar',
+  'Lonavla','Mahabalipuram','Hampi','Khajuraho','Ajanta','Ellora','Andaman','Coorg',
+  'Jaisalmer','Pushkar','Mount Abu','Kasol','Spiti','Ziro','Mcleodganj','Dharamshala',
+  'Bir Billing','Lansdowne','Chikmagalur','Sakleshpur','Wayanad','Alleppey','Kovalam',
+  'Varkala','Bekal','Gokarna','Hampi','Badami','Bijapur','Belur','Halebidu','Aihole'
+].sort()
+
 const router = Router()
 
-// GET /api/cities
+// GET /api/cities  — returns all Indian cities alphabetically
 router.get('/', (req, res) => {
-  res.json(Object.keys(nearbyPlaces))
+  // Merge static cities with nearbyPlaces keys (removes duplicates)
+  const combined = [...new Set([...ALL_INDIA_CITIES, ...Object.keys(nearbyPlaces)])].sort()
+  res.json(combined)
 })
 
 // GET /api/cities/costs?from=X&to=Y

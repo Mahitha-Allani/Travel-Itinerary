@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
 import Footer from '../components/Footer.jsx'
@@ -10,6 +10,76 @@ const TRIP_TYPES = [
   { value: 'Family',       icon: '👨‍👩‍👧‍👦', label: 'Family' },
   { value: 'Professional', icon: '💼', label: 'Professional' },
 ]
+
+// Searchable city picker with photo preview
+function CityPicker({ label, value, onChange, cities, excludeCity }) {
+  const [query, setQuery] = useState(value || '')
+  const [open, setOpen] = useState(false)
+  const [photo, setPhoto] = useState(null)
+  const ref = useRef(null)
+
+  const filtered = cities.filter(c =>
+    c !== excludeCity && c.toLowerCase().includes(query.toLowerCase())
+  ).slice(0, 50)
+
+  useEffect(() => {
+    if (value) {
+      setQuery(value)
+      api.get(`/cities/image?city=${encodeURIComponent(value)}`)
+        .then(({ data }) => setPhoto(data.imageUrl))
+        .catch(() => setPhoto(null))
+    } else {
+      setQuery('')
+      setPhoto(null)
+    }
+  }, [value])
+
+  useEffect(() => {
+    const handleClick = (e) => { if (!ref.current?.contains(e.target)) setOpen(false) }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
+
+  const select = (city) => {
+    onChange(city)
+    setQuery(city)
+    setOpen(false)
+  }
+
+  return (
+    <div ref={ref} className="relative w-full">
+      <p className="text-xs text-gray-400 mb-1.5">{label}</p>
+
+      {/* Photo banner */}
+      {photo && (
+        <div className="w-full h-20 rounded-xl overflow-hidden mb-2 shadow-sm border border-gray-100">
+          <img src={photo} alt={value} className="w-full h-full object-cover" />
+        </div>
+      )}
+
+      <input
+        type="text"
+        value={query}
+        placeholder={`Search ${label === 'From' ? 'source' : 'destination'}...`}
+        autoComplete="off"
+        onFocus={() => setOpen(true)}
+        onChange={e => { setQuery(e.target.value); onChange(''); setOpen(true) }}
+        className="w-full text-gray-800 text-sm font-medium bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-burgundy-300"
+      />
+
+      {open && filtered.length > 0 && (
+        <div className="absolute z-50 top-full mt-1 left-0 right-0 bg-white border border-gray-100 rounded-xl shadow-xl max-h-48 overflow-y-auto">
+          {filtered.map(city => (
+            <button key={city} type="button" onMouseDown={() => select(city)}
+              className="w-full text-left px-4 py-2.5 text-sm hover:bg-burgundy-50 hover:text-burgundy-700 transition-colors border-b border-gray-50 last:border-0">
+              📍 {city}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function Planner() {
   const navigate = useNavigate()
@@ -51,11 +121,13 @@ export default function Planner() {
           setFetchingPrice(false)
         }, 800)
       }).catch(() => { setCost(null); setFetchingPrice(false) })
-  }, [form.source, form.destination]) // Removed startDate and endDate from dependency array since stay cost is removed
+  }, [form.source, form.destination])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+    if (!form.source) return setError('Please select a source city.')
+    if (!form.destination) return setError('Please select a destination city.')
     if (form.source === form.destination) return setError('Source and destination must be different.')
     if (form.startDate && form.endDate && new Date(form.endDate) <= new Date(form.startDate))
       return setError('End date must be after start date.')
@@ -93,25 +165,21 @@ export default function Planner() {
               <label className="block text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
                 Where to?
               </label>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-xs text-gray-400 mb-1.5">From</p>
-                  <select required value={form.source}
-                    onChange={e => setForm({ ...form, source: e.target.value })}
-                    className="w-full text-gray-800 text-base font-medium bg-transparent border-none outline-none focus:ring-0 cursor-pointer">
-                    <option value="">Select source...</option>
-                    {cities.map(c => <option key={c} value={c}>{c}</option>)}
-                  </select>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-400 mb-1.5">To</p>
-                  <select required value={form.destination}
-                    onChange={e => setForm({ ...form, destination: e.target.value })}
-                    className="w-full text-gray-800 text-base font-medium bg-transparent border-none outline-none focus:ring-0 cursor-pointer">
-                    <option value="">Select destination...</option>
-                    {cities.map(c => <option key={c} value={c}>{c}</option>)}
-                  </select>
-                </div>
+              <div className="grid grid-cols-2 gap-6">
+                <CityPicker
+                  label="From"
+                  value={form.source}
+                  onChange={v => setForm({ ...form, source: v })}
+                  cities={cities}
+                  excludeCity={form.destination}
+                />
+                <CityPicker
+                  label="To"
+                  value={form.destination}
+                  onChange={v => setForm({ ...form, destination: v })}
+                  cities={cities}
+                  excludeCity={form.source}
+                />
               </div>
             </div>
 
