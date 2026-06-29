@@ -11,7 +11,10 @@ export async function sendWelcomeEmail(toEmail, userName) {
 
   try {
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,       // use STARTTLS (not SSL)
+      family: 4,           // force IPv4 — fixes Render's ENETUNREACH error
       auth: { user, pass }
     })
 

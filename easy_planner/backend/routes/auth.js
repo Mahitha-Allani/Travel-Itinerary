@@ -25,7 +25,10 @@ router.get('/test-email', async (req, res) => {
 
     const nodemailer = (await import('nodemailer')).default
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+      family: 4,           // force IPv4
       auth: { user, pass }
     })
 
