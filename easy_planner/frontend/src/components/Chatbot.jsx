@@ -29,15 +29,16 @@ export default function Chatbot() {
       const { data } = await api.post('/chat', { message: userMsg, history })
       let replyText = data.reply
 
-      // Check for hidden JSON action block at the end of the AI response
-      const actionMatch = replyText.match(/\{"action":\s*"save_trip".*\}/)
+      // Check for hidden JSON action block (handling potential formatting variations and code blocks)
+      const actionRegex = /(?:```(?:json)?\s*)?(\{\s*"action"\s*:\s*"save_trip"[\s\S]*?\})(?:\s*```)?/
+      const actionMatch = replyText.match(actionRegex)
       
       if (actionMatch) {
-        // Strip the JSON out of the visible text
+        // Strip the entire matched block (including code block wrappers) from the visible text
         replyText = replyText.replace(actionMatch[0], '').trim()
         
         try {
-          const actionData = JSON.parse(actionMatch[0])
+          const actionData = JSON.parse(actionMatch[1])
           // Automatically save the trip!
           await api.post('/trips', {
             source: 'My Location',
