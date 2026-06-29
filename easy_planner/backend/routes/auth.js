@@ -2,6 +2,7 @@ import { Router } from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import User from '../models/User.js'
+import { sendWelcomeEmail } from '../utils/email.js'
 
 const router = Router()
 
@@ -23,6 +24,9 @@ router.post('/register', async (req, res) => {
 
     const hashed = await bcrypt.hash(password, 10)
     const user   = await User.create({ name, email, password: hashed })
+
+    // Send welcome email asynchronously in the background
+    sendWelcomeEmail(user.email, user.name).catch(console.error)
 
     res.status(201).json({
       token: generateToken(user._id),
@@ -112,6 +116,8 @@ router.get('/google/callback', async (req, res) => {
         email: profile.email,
         password: hashed,
       })
+      // Send welcome email asynchronously in the background
+      sendWelcomeEmail(user.email, user.name).catch(console.error)
     } else if (!user.name && profile.name) {
       user.name = profile.name
       await user.save()
