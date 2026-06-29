@@ -9,6 +9,7 @@ import Itinerary    from './pages/Itinerary.jsx'
 import Profile      from './pages/Profile.jsx'
 import Map          from './pages/Map.jsx'
 import TripDetail   from './pages/TripDetail.jsx'
+import Scrapbook    from './pages/Scrapbook.jsx'
 import AuthCallback from './pages/AuthCallback.jsx'
 import Chatbot      from './components/Chatbot.jsx'
 
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/profile"         element={<PrivateRoute><Profile /></PrivateRoute>} />
         <Route path="/map"             element={<PrivateRoute><Map /></PrivateRoute>} />
         <Route path="/trip/:id"        element={<PrivateRoute><TripDetail /></PrivateRoute>} />
+        <Route path="/scrapbooks"      element={<PrivateRoute><Scrapbook /></PrivateRoute>} />
         <Route path="*"                element={<Navigate to="/" replace />} />
       </Routes>
       <Chatbot />

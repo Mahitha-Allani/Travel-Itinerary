@@ -32,6 +32,7 @@ export default function Navbar() {
           {navLink('/planner',   'Plan Your Trip')}
           {navLink('/itinerary', 'Your Itinerary')}
           {navLink('/map', '🗺️ Map')}
+          {navLink('/scrapbooks', '📸 Scrapbooks')}
         </div>
 
         {/* Avatar + logout */}
@@ -65,6 +66,8 @@ export default function Navbar() {
           {navLink('/home',      'Home')}
           {navLink('/planner',   'Plan Your Trip')}
           {navLink('/itinerary', 'Your Itinerary')}
+          {navLink('/map',       '🗺️ Map')}
+          {navLink('/scrapbooks','📸 Scrapbooks')}
           {navLink('/profile',   'Profile')}
           <button onClick={logout} className="text-sm text-left text-red-400 hover:text-red-600">Logout</button>
         </div>
