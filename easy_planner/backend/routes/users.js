@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import User from '../models/User.js'
 import protect from '../middleware/auth.js'
+import cloudinary from '../utils/cloudinary.js'
 
 const router = Router()
 
@@ -18,7 +19,14 @@ router.put('/profile-picture', async (req, res) => {
     const user = await User.findById(req.user._id)
     if (!user) return res.status(404).json({ error: 'User not found' })
 
-    user.profilePicture = profilePicture
+    // Upload to Cloudinary
+    const uploadRes = await cloudinary.uploader.upload(profilePicture, {
+      folder: 'voyara/profiles',
+      width: 400,
+      crop: "scale"
+    })
+
+    user.profilePicture = uploadRes.secure_url
     await user.save()
 
     res.json({ success: true, profilePicture: user.profilePicture })

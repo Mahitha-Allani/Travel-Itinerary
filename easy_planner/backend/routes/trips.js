@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import Trip from '../models/Trip.js'
 import protect from '../middleware/auth.js'
+import cloudinary from '../utils/cloudinary.js'
 import { costs, nearbyPlaces, activities } from '../config/data.js'
 
 const router = Router()
@@ -279,7 +280,24 @@ router.put('/:id/scrapbook', async (req, res) => {
     const trip = await Trip.findOne({ _id: req.params.id, userId: req.user._id })
     if (!trip) return res.status(404).json({ error: 'Trip not found' })
 
-    if (scrapbookPhotos !== undefined) trip.scrapbookPhotos = scrapbookPhotos
+    if (scrapbookPhotos !== undefined) {
+      // Upload any new base64 photos to Cloudinary in parallel
+      const uploadedPhotos = await Promise.all(
+        scrapbookPhotos.map(async (photo) => {
+          if (photo.startsWith('data:image/')) {
+            const uploadRes = await cloudinary.uploader.upload(photo, {
+              folder: 'voyara/scrapbook',
+              width: 800,
+              crop: "scale"
+            })
+            return uploadRes.secure_url
+          }
+          return photo // Already a URL
+        })
+      )
+      trip.scrapbookPhotos = uploadedPhotos
+    }
+    
     if (journalNotes !== undefined) trip.journalNotes = journalNotes
 
     await trip.save()
