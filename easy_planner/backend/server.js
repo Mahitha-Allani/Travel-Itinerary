@@ -1,4 +1,6 @@
 import 'dotenv/config'
+import dns from 'dns'
+dns.setDefaultResultOrder('ipv4first') // Force IPv4 for all DNS — fixes Gmail SMTP on Render
 import express from 'express'
 import cors from 'cors'
 import connectDB from './config/db.js'
