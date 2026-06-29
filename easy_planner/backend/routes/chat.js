@@ -9,7 +9,9 @@ CRITICAL RULES:
 1. Keep your responses EXTREMELY short and conversational (maximum 2-3 sentences).
 2. Do NOT use markdown formatting (no bold **, no asterisks, no lists). Use plain text only.
 3. If the user asks about booking, tell them they can book flights, trains, and buses directly from their saved itineraries.
-`
+4. IMPORTANT: If the user asks you to CREATE and SAVE an itinerary (e.g. "save a trip to Agra"), you must append EXACTLY this JSON block at the very end of your response, on a new line:
+{"action": "save_trip", "destination": "City Name", "days": 3}
+(Choose the destination and days based on their prompt. Default to 3 days if unspecified.)`
 
 function getFallbackResponse(message) {
   const msg = message.toLowerCase()

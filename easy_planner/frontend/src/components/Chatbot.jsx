@@ -27,7 +27,31 @@ export default function Chatbot() {
 
     try {
       const { data } = await api.post('/chat', { message: userMsg, history })
-      setMessages(prev => [...prev, { role: 'assistant', text: data.reply }])
+      let replyText = data.reply
+
+      // Check for hidden JSON action block at the end of the AI response
+      const actionMatch = replyText.match(/\{"action":\s*"save_trip".*\}/)
+      
+      if (actionMatch) {
+        // Strip the JSON out of the visible text
+        replyText = replyText.replace(actionMatch[0], '').trim()
+        
+        try {
+          const actionData = JSON.parse(actionMatch[0])
+          // Automatically save the trip!
+          await api.post('/trips', {
+            source: 'My Location',
+            destination: actionData.destination || 'Unknown',
+            days: actionData.days || 3,
+            tripType: 'AI Generated'
+          })
+          replyText += '\n\n✅ I have successfully saved this trip to your itinerary! Check your "Your Itinerary" tab.'
+        } catch (saveErr) {
+          console.error("Failed to execute AI save action:", saveErr)
+        }
+      }
+
+      setMessages(prev => [...prev, { role: 'assistant', text: replyText }])
     } catch (err) {
       console.error(err)
       setMessages(prev => [...prev, { role: 'assistant', text: "Sorry, I'm having trouble connecting right now." }])
