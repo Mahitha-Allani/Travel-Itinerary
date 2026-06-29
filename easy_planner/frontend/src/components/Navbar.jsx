@@ -8,8 +8,6 @@ export default function Navbar() {
   const { pathname } = useLocation()
   const [open, setOpen] = useState(false)
 
-  const handleLogout = () => { logout(); navigate('/') }
-
   const navLink = (to, label) => (
     <Link to={to} onClick={() => setOpen(false)}
       className={`text-sm font-semibold transition-colors ${
@@ -40,12 +38,16 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           <button onClick={() => navigate('/profile')}
             className="flex items-center gap-2 hover:bg-creme-50 px-3 py-1.5 rounded-xl transition">
-            <div className="w-8 h-8 rounded-full bg-linear-to-br from-pink-500 to-burgundy-500 flex items-center justify-center text-white text-xs font-bold">
-              {initials}
+            <div className="w-8 h-8 rounded-full bg-linear-to-br from-pink-500 to-burgundy-500 flex items-center justify-center text-white text-xs font-bold overflow-hidden">
+              {user?.profilePicture ? (
+                <img src={user.profilePicture} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                initials
+              )}
             </div>
             <span className="text-sm font-medium text-gray-700 max-w-24 truncate">{user?.name}</span>
           </button>
-          <button onClick={handleLogout}
+          <button onClick={logout}
             className="text-sm text-gray-500 hover:text-red-500 transition">
             Logout
           </button>
@@ -64,7 +66,7 @@ export default function Navbar() {
           {navLink('/planner',   'Plan Your Trip')}
           {navLink('/itinerary', 'Your Itinerary')}
           {navLink('/profile',   'Profile')}
-          <button onClick={handleLogout} className="text-sm text-left text-red-400 hover:text-red-600">Logout</button>
+          <button onClick={logout} className="text-sm text-left text-red-400 hover:text-red-600">Logout</button>
         </div>
       )}
     </nav>

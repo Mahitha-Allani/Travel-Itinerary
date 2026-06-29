@@ -15,6 +15,12 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+
+    if (form.password.length < 6) {
+      setError('Password must be at least 6 characters long.')
+      return
+    }
+
     setLoading(true)
     try {
       const { data } = await api.post('/auth/login', form)

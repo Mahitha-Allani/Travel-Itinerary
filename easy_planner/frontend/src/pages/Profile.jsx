@@ -23,7 +23,7 @@ export default function Profile() {
 
   useState(() => { loadStats() }, [])
 
-  const handleLogout = () => { logout(); navigate('/') }
+  const handleLogout = () => { logout() }
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0]
