@@ -7,7 +7,7 @@ export default function GoogleAuthModal({ isOpen, onClose }) {
 
   const handleGoogleLogin = () => {
     // Redirect to backend → backend redirects to Google → Google redirects back
-    window.location.href = `${BACKEND_URL}/auth/google`
+    window.location.href = 'https://travel-itinerary-401f.onrender.com/api/auth/google'
   }
 
   return (
