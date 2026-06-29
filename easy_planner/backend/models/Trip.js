@@ -16,6 +16,12 @@ const tripSchema = new mongoose.Schema(
     },
     places:     [String],
     activities: [String],
+
+    // Lifecycle features
+    status: { type: String, enum: ['planned', 'completed'], default: 'planned' },
+    completedActivities: [String],
+    scrapbookPhotos: [String], // Stores Base64 images
+    journalNotes: { type: String, default: '' }
   },
   { timestamps: true }
 )

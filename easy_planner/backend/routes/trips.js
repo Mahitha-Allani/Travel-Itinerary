@@ -234,6 +234,61 @@ router.get('/', async (req, res) => {
   }
 })
 
+// PUT /api/trips/:id/activities
+router.put('/:id/activities', async (req, res) => {
+  try {
+    const { activity, completed } = req.body
+    if (!activity) return res.status(400).json({ error: 'Activity is required' })
+
+    const trip = await Trip.findOne({ _id: req.params.id, userId: req.user._id })
+    if (!trip) return res.status(404).json({ error: 'Trip not found' })
+
+    if (completed) {
+      if (!trip.completedActivities.includes(activity)) {
+        trip.completedActivities.push(activity)
+      }
+    } else {
+      trip.completedActivities = trip.completedActivities.filter(a => a !== activity)
+    }
+
+    await trip.save()
+    res.json(trip)
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// PUT /api/trips/:id/complete
+router.put('/:id/complete', async (req, res) => {
+  try {
+    const trip = await Trip.findOne({ _id: req.params.id, userId: req.user._id })
+    if (!trip) return res.status(404).json({ error: 'Trip not found' })
+
+    trip.status = trip.status === 'completed' ? 'planned' : 'completed'
+    await trip.save()
+    res.json(trip)
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// PUT /api/trips/:id/scrapbook
+router.put('/:id/scrapbook', async (req, res) => {
+  try {
+    const { scrapbookPhotos, journalNotes } = req.body
+    const trip = await Trip.findOne({ _id: req.params.id, userId: req.user._id })
+    if (!trip) return res.status(404).json({ error: 'Trip not found' })
+
+    if (scrapbookPhotos !== undefined) trip.scrapbookPhotos = scrapbookPhotos
+    if (journalNotes !== undefined) trip.journalNotes = journalNotes
+
+    await trip.save()
+    res.json(trip)
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
 // DELETE /api/trips/:id
 router.delete('/:id', async (req, res) => {
   try {

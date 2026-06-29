@@ -11,6 +11,9 @@ export default function Profile() {
   const [trips, setTrips] = useState(null)
   const [loaded, setLoaded] = useState(false)
 
+  const fileInputRef = useRef(null)
+  const [uploading, setUploading] = useState(false)
+
   const loadStats = async () => {
     if (loaded) return
     const { data } = await api.get('/trips')
@@ -21,6 +24,29 @@ export default function Profile() {
   useState(() => { loadStats() }, [])
 
   const handleLogout = () => { logout(); navigate('/') }
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    // Convert to Base64
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onloadend = async () => {
+      try {
+        setUploading(true)
+        const base64Image = reader.result
+        await api.put('/users/profile-picture', { profilePicture: base64Image })
+        // Need to update user context or force refresh, simple reload for now
+        window.location.reload()
+      } catch (err) {
+        console.error('Upload failed', err)
+        alert('Failed to upload profile picture. Image might be too large.')
+      } finally {
+        setUploading(false)
+      }
+    }
+  }
 
   const initials = user?.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U'
 
@@ -36,14 +62,38 @@ export default function Profile() {
 
           {/* Profile card */}
           <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-            <div className="bg-linear-to-r from-pink-500 to-burgundy-600 h-28 sm:h-36" />
+            <div className="bg-linear-to-r from-pink-500 to-burgundy-600 h-28 sm:h-36 relative" />
             <div className="px-6 pb-6">
               <div className="-mt-10 mb-4 flex items-end justify-between">
-                <div className="w-20 h-20 rounded-2xl bg-white shadow-lg flex items-center justify-center text-3xl font-bold text-burgundy-600 border-4 border-white">
-                  {initials}
+                
+                {/* Avatar with Upload */}
+                <div 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-white shadow-xl flex items-center justify-center text-4xl font-bold text-burgundy-600 border-4 border-white relative group cursor-pointer overflow-hidden z-10"
+                >
+                  {user?.profilePicture ? (
+                    <img src={user.profilePicture} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    initials
+                  )}
+                  
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-white text-xs font-bold text-center">
+                      {uploading ? 'Uploading...' : 'Change\nPhoto'}
+                    </span>
+                  </div>
                 </div>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  ref={fileInputRef} 
+                  className="hidden" 
+                  onChange={handleFileChange}
+                />
+
                 <button onClick={handleLogout}
-                  className="text-sm text-red-400 hover:text-red-600 border border-red-200 hover:border-red-400 px-4 py-1.5 rounded-xl transition">
+                  className="text-sm text-red-400 hover:text-red-600 border border-red-200 hover:border-red-400 px-4 py-1.5 rounded-xl transition z-10">
                   Logout
                 </button>
               </div>

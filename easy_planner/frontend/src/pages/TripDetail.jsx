@@ -234,17 +234,43 @@ export default function TripDetail() {
               <span className="text-xs text-gray-400 font-medium">{trip.activities.length} day{trip.activities.length !== 1 ? 's' : ''} · {trip.destination}</span>
             </div>
             <div className="space-y-0">
-              {trip.activities.map((act, i) => (
-                <div key={i} className="flex gap-4 items-start py-4 border-b border-gray-50 last:border-0">
-                  <div className="w-8 h-8 rounded-full bg-burgundy-100 text-burgundy-700 font-bold text-sm flex items-center justify-center shrink-0">
-                    {i + 1}
+              {trip.activities.map((act, i) => {
+                const isCompleted = trip.completedActivities?.includes(act)
+                return (
+                  <div key={i} className={`flex gap-4 items-start py-4 border-b border-gray-50 last:border-0 transition-opacity ${isCompleted ? 'opacity-50' : 'opacity-100'}`}>
+                    <button 
+                      onClick={async () => {
+                        const res = await api.put(`/trips/${trip._id}/activities`, { activity: act, completed: !isCompleted })
+                        setTrip(res.data)
+                      }}
+                      className={`w-8 h-8 rounded-full font-bold text-sm flex items-center justify-center shrink-0 border-2 transition-colors cursor-pointer
+                        ${isCompleted ? 'bg-green-500 border-green-500 text-white' : 'bg-transparent border-gray-300 text-gray-400 hover:border-burgundy-400'}`}
+                    >
+                      {isCompleted ? '✓' : i + 1}
+                    </button>
+                    <div className="flex-1 mt-1">
+                      <p className={`font-semibold text-sm transition-colors ${isCompleted ? 'text-gray-400 line-through' : 'text-gray-800'}`}>{act}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">Day {i + 1} of {trip.days || trip.activities.length} · {trip.destination}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-semibold text-gray-800 text-sm">{act}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">Day {i + 1} of {trip.days || trip.activities.length} · {trip.destination}</p>
-                  </div>
-                </div>
-              ))}
+                )
+              })}
+            </div>
+            
+            {/* Complete Trip Button */}
+            <div className="mt-8 pt-6 border-t border-gray-100 text-center">
+              <button 
+                onClick={async () => {
+                  const res = await api.put(`/trips/${trip._id}/complete`)
+                  setTrip(res.data)
+                }}
+                className={`px-8 py-3 rounded-xl font-bold text-sm shadow-sm transition cursor-pointer
+                  ${trip.status === 'completed' 
+                    ? 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200' 
+                    : 'bg-green-600 text-white hover:bg-green-700'}`}
+              >
+                {trip.status === 'completed' ? 'Reopen Trip Planning' : '✅ Mark Trip as Completed'}
+              </button>
             </div>
           </div>
         )}
@@ -443,8 +469,84 @@ export default function TripDetail() {
           </div>
         </div>
 
+        {/* Post-Trip Travel Memories Scrapbook */}
+        {trip.status === 'completed' && (
+          <div className="bg-white rounded-2xl shadow-lg border border-pink-100 overflow-hidden mb-8 relative">
+            <div className="bg-linear-to-r from-pink-500 to-burgundy-600 h-2" />
+            <div className="p-6 sm:p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">📸 Travel Memories</h2>
+              <p className="text-gray-500 text-sm mb-6">Your trip is complete! Upload photos and write down your favorite memories to create a permanent scrapbook of your journey to {trip.destination}.</p>
+              
+              <div className="space-y-6">
+                {/* Journal Notes */}
+                <div>
+                  <h3 className="font-semibold text-gray-700 mb-2 text-sm">Trip Journal</h3>
+                  <textarea
+                    value={trip.journalNotes || ''}
+                    onChange={(e) => setTrip({ ...trip, journalNotes: e.target.value })}
+                    onBlur={async () => {
+                      await api.put(`/trips/${trip._id}/scrapbook`, { journalNotes: trip.journalNotes })
+                    }}
+                    placeholder="Write about your favorite moments, funny stories, or things you want to remember..."
+                    className="w-full h-32 p-4 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400 resize-none"
+                  />
+                </div>
+
+                {/* Photo Gallery */}
+                <div>
+                  <h3 className="font-semibold text-gray-700 mb-2 text-sm">Photo Gallery</h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    {trip.scrapbookPhotos?.map((photo, i) => (
+                      <div key={i} className="aspect-square rounded-xl overflow-hidden shadow-sm border border-gray-200 relative group">
+                        <img src={photo} alt={`Memory ${i}`} className="w-full h-full object-cover" />
+                        <button 
+                          onClick={async () => {
+                            if(!confirm('Delete photo?')) return
+                            const newPhotos = trip.scrapbookPhotos.filter((_, index) => index !== i)
+                            const res = await api.put(`/trips/${trip._id}/scrapbook`, { scrapbookPhotos: newPhotos })
+                            setTrip(res.data)
+                          }}
+                          className="absolute top-2 right-2 bg-black/60 text-white w-6 h-6 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                    
+                    {/* Upload Button */}
+                    <label className="aspect-square rounded-xl border-2 border-dashed border-gray-300 hover:border-pink-400 bg-gray-50 hover:bg-pink-50 flex flex-col items-center justify-center cursor-pointer transition-colors">
+                      <span className="text-3xl mb-1 text-gray-400">📷</span>
+                      <span className="text-xs font-semibold text-gray-500">Add Photo</span>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files[0]
+                          if(!file) return
+                          const reader = new FileReader()
+                          reader.readAsDataURL(file)
+                          reader.onloadend = async () => {
+                            try {
+                              const newPhotos = [...(trip.scrapbookPhotos || []), reader.result]
+                              const res = await api.put(`/trips/${trip._id}/scrapbook`, { scrapbookPhotos: newPhotos })
+                              setTrip(res.data)
+                            } catch (err) {
+                              alert("Failed to upload. Image may be too large.")
+                            }
+                          }
+                        }}
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Delete */}
-        <div className="text-center">
+        <div className="text-center mt-12">
           <button onClick={async () => {
             if (!confirm('Delete this trip?')) return
             await api.delete(`/trips/${trip._id}`)

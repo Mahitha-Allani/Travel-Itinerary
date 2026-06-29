@@ -8,6 +8,7 @@ import tripRoutes from './routes/trips.js'
 import chatRoutes from './routes/chat.js'
 import reviewRoutes from './routes/reviews.js'
 import imageRoutes from './routes/images.js'
+import usersRoutes from './routes/users.js'
 
 const app  = express()
 const PORT = process.env.PORT || 5000
@@ -15,9 +16,10 @@ const PORT = process.env.PORT || 5000
 connectDB()
 
 app.use(cors({ origin: ['http://localhost:5173', 'https://travel-itinerary-flame.vercel.app'], credentials: true }))
-app.use(express.json())
+app.use(express.json({ limit: '50mb' }))
 
 app.use('/api/auth',    authRoutes)
+app.use('/api/users',   usersRoutes)
 app.use('/api/cities',  cityRoutes)
 app.use('/api/trips',   tripRoutes)
 app.use('/api/chat',    chatRoutes)
