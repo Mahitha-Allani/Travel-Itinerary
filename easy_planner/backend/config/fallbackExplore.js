@@ -78,6 +78,86 @@ export const fallbackExplore = {
       { name: "Fisherman's Wharf", rating: 4.5, cuisine: "Goan & Global", address: "Mobor", description: "Riverside dining offering excellent Goan seafood and live music." },
       { name: "Vinayak Family Restaurant", rating: 4.6, cuisine: "Goan Thali", address: "Assagao", description: "A hidden gem loved by locals for its authentic and affordable Goan fish thali." }
     ]
+  },
+  Hyderabad: {
+    hotels: [
+      { name: "Taj Falaknuma Palace", rating: 4.9, basePrice: 30000, address: "Engine Bowli, Falaknuma", description: "A stunning 19th-century palace hotel perched on a hilltop offering royal Nizami hospitality." },
+      { name: "The Westin Hyderabad Mindspace", rating: 4.7, basePrice: 9500, address: "Hi-Tech City", description: "Upscale modern hotel in the tech hub with excellent facilities and rooftop dining." },
+      { name: "ITC Kohenur", rating: 4.8, basePrice: 14000, address: "Madhapur", description: "Luxurious and contemporary hotel with breathtaking views of the Durgam Cheruvu lake." },
+      { name: "Novotel Hyderabad Airport", rating: 4.5, basePrice: 6500, address: "Shamshabad", description: "Convenient modern hotel attached to Rajiv Gandhi International Airport." },
+      { name: "Lemon Tree Premier", rating: 4.4, basePrice: 5000, address: "Hi-Tech City", description: "Vibrant and well-appointed hotel perfect for business and leisure stays in HITEC City." }
+    ],
+    restaurants: [
+      { name: "Paradise Biryani", rating: 4.8, cuisine: "Hyderabadi", address: "Secunderabad", description: "The legendary home of authentic Hyderabadi Dum Biryani — a must-visit institution." },
+      { name: "Jewel of Nizam", rating: 4.7, cuisine: "Hyderabadi Fine Dining", address: "Taj Falaknuma Palace", description: "Royal Nizami cuisine served in a breathtaking heritage palace setting." },
+      { name: "Pista House", rating: 4.6, cuisine: "Haleem & Biryani", address: "Shah Ali Banda", description: "Iconic for its award-winning Haleem and special Hyderabadi Biryani." },
+      { name: "Rayalaseema Ruchulu", rating: 4.5, cuisine: "Andhra Spicy", address: "Banjara Hills", description: "Popular for fiery Andhra-style curries, biryanis, and traditional meals." },
+      { name: "Chutneys", rating: 4.6, cuisine: "South Indian Vegetarian", address: "Banjara Hills", description: "Famous for its crispy dosas, idlis, and wide variety of fresh chutneys." }
+    ]
+  },
+  Bangalore: {
+    hotels: [
+      { name: "The Leela Palace", rating: 4.9, basePrice: 16000, address: "HAL Airport Road", description: "Award-winning luxury hotel blending Vijayanagara and European architecture." },
+      { name: "ITC Gardenia", rating: 4.8, basePrice: 14000, address: "Residency Road", description: "A green luxury hotel with the largest atrium in India and world-class dining." },
+      { name: "Taj MG Road", rating: 4.7, basePrice: 12000, address: "MG Road", description: "Classic luxury hotel right in the heart of Bangalore with iconic dining restaurants." },
+      { name: "Sheraton Grand", rating: 4.6, basePrice: 9500, address: "Brigade Gateway", description: "Contemporary luxury hotel with excellent facilities in the upscale Brigade area." },
+      { name: "Ibis Bengaluru City Centre", rating: 4.3, basePrice: 4500, address: "Hosur Road", description: "Smart and comfortable budget hotel ideally located for business and leisure." }
+    ],
+    restaurants: [
+      { name: "Karavalli", rating: 4.8, cuisine: "Coastal Indian", address: "The Gateway Hotel", description: "Award-winning restaurant serving authentic coastal Karnataka and Goan cuisine." },
+      { name: "MTR (Mavalli Tiffin Room)", rating: 4.7, cuisine: "South Indian", address: "Lalbagh Road", description: "An 85-year-old legendary institution serving iconic South Indian breakfast." },
+      { name: "Truffles", rating: 4.6, cuisine: "American & Burgers", address: "Koramangala", description: "Beloved local chain famous for their juicy burgers and sandwiches." },
+      { name: "Toit Brewpub", rating: 4.7, cuisine: "Pub & Continental", address: "Indiranagar", description: "Bangalore's iconic craft brewery with great food and live music." },
+      { name: "Brahmin's Coffee Bar", rating: 4.7, cuisine: "South Indian Breakfast", address: "Basavanagudi", description: "A tiny, iconic Bangalore institution famous for its idli-vada and filter coffee." }
+    ]
+  },
+  Chennai: {
+    hotels: [
+      { name: "ITC Grand Chola", rating: 4.9, basePrice: 16000, address: "Mount Road", description: "India's largest luxury hotel, inspired by the grandeur of the Chola dynasty." },
+      { name: "Taj Coromandel", rating: 4.8, basePrice: 13000, address: "Nungambakkam", description: "Classic luxury hotel in the heart of the city with iconic South Indian hospitality." },
+      { name: "The Leela Palace", rating: 4.7, basePrice: 12000, address: "Adyar", description: "Opulent contemporary hotel near the beach with excellent facilities." },
+      { name: "Marriott", rating: 4.6, basePrice: 9000, address: "OMR", description: "Modern luxury with great sea views in the vibrant OMR tech corridor." },
+      { name: "Radisson Blu", rating: 4.4, basePrice: 7000, address: "Mount Road", description: "Well-appointed hotel with great dining and easy city center access." }
+    ],
+    restaurants: [
+      { name: "Murugan Idli Shop", rating: 4.8, cuisine: "South Indian", address: "Various Locations", description: "Famous for the softest, fluffiest idlis served with an array of incredible chutneys." },
+      { name: "Peshawri", rating: 4.7, cuisine: "North-West Frontier", address: "ITC Grand Chola", description: "Extension of the legendary Delhi restaurant, famous for robust tandoori dishes." },
+      { name: "Kaaraikudi Chettinad Restaurant", rating: 4.6, cuisine: "Chettinad", address: "Nungambakkam", description: "Authentic aromatic Chettinad cuisine with signature pepper and kalpasi spices." },
+      { name: "Amethyst", rating: 4.7, cuisine: "Continental & Cafe", address: "Royapettah", description: "A charming heritage bungalow converted into a beautiful restaurant and boutique." },
+      { name: "Anjappar", rating: 4.5, cuisine: "Chettinad", address: "Anna Salai", description: "A popular chain for authentic Chettinad non-vegetarian specialties." }
+    ]
+  },
+  Kolkata: {
+    hotels: [
+      { name: "The Oberoi Grand", rating: 4.9, basePrice: 14000, address: "Chowringhee Road", description: "The grande dame of Kolkata — a colonial heritage hotel that defined luxury for 150 years." },
+      { name: "ITC Royal Bengal", rating: 4.8, basePrice: 13000, address: "J.B.S. Haldane Avenue", description: "A towering modern luxury hotel with world-class amenities and iconic city views." },
+      { name: "Taj Bengal", rating: 4.7, basePrice: 12000, address: "Alipore", description: "Luxury hotel in the leafy Alipore area, blending local artistry with modern luxury." },
+      { name: "Kenilworth", rating: 4.5, basePrice: 6000, address: "Little Russell Street", description: "A charming heritage boutique hotel in the heart of the city." },
+      { name: "Hyatt Regency", rating: 4.6, basePrice: 9000, address: "Salt Lake", description: "Modern luxury hotel with great facilities, convenient to the business district." }
+    ],
+    restaurants: [
+      { name: "Peter Cat", rating: 4.7, cuisine: "Continental", address: "Park Street", description: "An institution since 1975, famous for its Chelo Kebab and European-style dining." },
+      { name: "Flurys", rating: 4.6, cuisine: "Bakery & Continental", address: "Park Street", description: "Kolkata's most iconic tearoom and bakery since 1927, a city landmark." },
+      { name: "6 Ballygunge Place", rating: 4.7, cuisine: "Bengali", address: "Ballygunge", description: "The definitive restaurant for authentic Bengali home-style cooking and fish dishes." },
+      { name: "Arsalan", rating: 4.8, cuisine: "Mughlai & Biryani", address: "Park Circus", description: "Legendary for its Kolkata-style biryani with potato — a city obsession." },
+      { name: "Mocambo", rating: 4.6, cuisine: "Continental", address: "Park Street", description: "A beloved heritage restaurant famous for its Lobster Thermidor and cozy ambience." }
+    ]
+  },
+  Amritsar: {
+    hotels: [
+      { name: "Taj Swarna", rating: 4.8, basePrice: 10000, address: "Queens Road", description: "Luxury hotel inspired by the grandeur of the Golden Temple and Sikh culture." },
+      { name: "Hyatt Amritsar", rating: 4.7, basePrice: 9500, address: "MBM Hotel Building", description: "Modern upscale hotel with great amenities close to the Golden Temple." },
+      { name: "Holiday Inn Express", rating: 4.4, basePrice: 5500, address: "G.T. Road", description: "Comfortable smart hotel with easy access to the airport and major attractions." },
+      { name: "Ranjit's Svaasa", rating: 4.7, basePrice: 8000, address: "Majitha Road", description: "A stunning heritage boutique hotel in a restored 200-year-old haveli." },
+      { name: "Ramada Amritsar", rating: 4.3, basePrice: 4500, address: "Bypass Road", description: "Well-equipped business hotel offering comfortable rooms and good dining." }
+    ],
+    restaurants: [
+      { name: "Bharawan Da Dhaba", rating: 4.8, cuisine: "Punjabi", address: "Town Hall, Katra Ahluwalia", description: "Legendary 100-year-old dhaba famous for its giant stuffed parathas and dal makhani." },
+      { name: "Kesar Da Dhaba", rating: 4.7, cuisine: "Punjabi Vegetarian", address: "Shastri Market", description: "Another historic dhaba since 1916, known for hearty Punjabi dal and curries." },
+      { name: "Crystal Restaurant", rating: 4.6, cuisine: "Multi-Cuisine", address: "Queens Road", description: "Amritsar's most popular family restaurant serving North Indian and Chinese food." },
+      { name: "Langar at the Golden Temple", rating: 5.0, cuisine: "Free Langar", address: "Golden Temple", description: "The world's largest free kitchen — simple, divine, soulful food for everyone." },
+      { name: "Maken Di Hatti", rating: 4.7, cuisine: "Lassi & Sweets", address: "Near Golden Temple", description: "Famous for its thick creamy lassi served in kulhads since generations." }
+    ]
   }
 }
 

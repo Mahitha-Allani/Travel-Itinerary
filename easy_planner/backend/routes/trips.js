@@ -100,13 +100,33 @@ router.post('/', async (req, res) => {
 
 // GET /api/trips/:id/explore — nearby hotels & restaurants dynamically via API
 router.get('/:id/explore', async (req, res) => {
+  let destination = null
   try {
     const trip = await Trip.findOne({ _id: req.params.id, userId: req.user._id })
     if (!trip) return res.status(404).json({ error: 'Trip not found' })
 
-    const destination = trip.destination
+    destination = trip.destination
     const groqKey = process.env.GROQ_API_KEY
     const openAIKey = process.env.OPENAI_API_KEY
+
+    // Always use local fallback if no AI keys are configured
+    if (!groqKey && !openAIKey) {
+      return res.json(generateDynamicFallback(destination))
+    }
+
+    let apiUrl = ''
+    let apiKey = ''
+    let model = ''
+
+    if (groqKey) {
+      apiUrl = 'https://api.groq.com/openai/v1/chat/completions'
+      apiKey = groqKey
+      model = 'llama-3.1-8b-instant'
+    } else {
+      apiUrl = 'https://api.openai.com/v1/chat/completions'
+      apiKey = openAIKey
+      model = 'gpt-3.5-turbo'
+    }
 
     const systemPrompt = `You are a professional travel assistant. Return ONLY a raw JSON object and nothing else. Do not wrap in markdown code blocks, do not include any explanatory text. The response must be valid JSON with the following structure:
 {
@@ -130,25 +150,6 @@ router.get('/:id/explore', async (req, res) => {
   ]
 }
 Return 5 high-quality, popular, and diverse options for each. Do not include any hardcoded booking or redirection website links.`
-
-    // Fallback if no keys are provided
-    if (!groqKey && !openAIKey) {
-      return res.json(generateDynamicFallback(destination))
-    }
-
-    let apiUrl = ''
-    let apiKey = ''
-    let model = ''
-
-    if (groqKey) {
-      apiUrl = 'https://api.groq.com/openai/v1/chat/completions'
-      apiKey = groqKey
-      model = 'llama-3.1-8b-instant'
-    } else {
-      apiUrl = 'https://api.openai.com/v1/chat/completions'
-      apiKey = openAIKey
-      model = 'gpt-3.5-turbo'
-    }
 
     const response = await fetch(apiUrl, {
       method: 'POST',
@@ -177,8 +178,8 @@ Return 5 high-quality, popular, and diverse options for each. Do not include any
     res.json(parsed)
   } catch (err) {
     console.error('Explore API error:', err)
-    // Dynamic fallback in case of API failure
-    res.json(generateDynamicFallback(destination))
+    // Always fall back to local curated data — destination is declared outside try so it's always in scope
+    res.json(generateDynamicFallback(destination || 'Mumbai'))
   }
 })
 
