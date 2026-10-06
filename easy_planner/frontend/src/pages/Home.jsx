@@ -4,8 +4,54 @@ import Navbar from '../components/Navbar.jsx'
 import Footer from '../components/Footer.jsx'
 import api from '../api/axios.js'
 
+// Curated fallback images — specific, verified photos of each city
+const CITY_FALLBACKS = {
+  Mumbai:   'https://wsrv.nl/?url=images.unsplash.com/photo-1529253355930-ddbe423a2ac7%3Fw%3D600%26q%3D80', // Gateway of India
+  Jaipur:   'https://wsrv.nl/?url=images.unsplash.com/photo-1599661046827-dacff0c0f09a%3Fw%3D600%26q%3D80', // Hawa Mahal
+  Agra:     'https://wsrv.nl/?url=images.unsplash.com/photo-1564507592333-c60657eea523%3Fw%3D600%26q%3D80', // Taj Mahal
+  Goa:      'https://wsrv.nl/?url=images.unsplash.com/photo-1512343879784-a960bf40e7f2%3Fw%3D600%26q%3D80', // Goa beach
+  Kerala:   'https://wsrv.nl/?url=images.unsplash.com/photo-1602216056096-3b40cc0c9944%3Fw%3D600%26q%3D80', // Backwaters
+  Delhi:    'https://wsrv.nl/?url=images.unsplash.com/photo-1587474260584-136574528ed5%3Fw%3D600%26q%3D80', // India Gate
+  Udaipur:  'https://wsrv.nl/?url=images.unsplash.com/photo-1477587458883-47145ed94245%3Fw%3D600%26q%3D80', // Lake Palace
+  Leh:      'https://wsrv.nl/?url=images.unsplash.com/photo-1626621341517-bbf3d9990a23%3Fw%3D600%26q%3D80', // Ladakh mountains
+}
+
 const featuredCities = ['Mumbai', 'Jaipur', 'Agra', 'Goa', 'Kerala', 'Delhi', 'Udaipur', 'Leh']
 
+// Smart city card: tries API first, falls back to verified curated image
+function SmartCityCard({ name, onClick }) {
+  const fallback = CITY_FALLBACKS[name] || 'https://wsrv.nl/?url=images.unsplash.com/photo-1476514525535-07fb3b4ae5f1%3Fw%3D600%26q%3D80'
+  const [img, setImg] = useState(fallback)
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    api.get(`/images/search?q=${encodeURIComponent(name + ' India landmark')}`)
+      .then(res => {
+        if (!cancelled && res.data?.imageUrl) {
+          setImg(res.data.imageUrl)
+        }
+      })
+      .catch(() => {}) // silently keep the verified fallback
+    return () => { cancelled = true }
+  }, [name])
+
+  return (
+    <div onClick={onClick} className="cursor-pointer rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all relative group bg-gray-200" style={{ minHeight: '160px' }}>
+      <img
+        src={img}
+        alt={name}
+        onLoad={() => setLoaded(true)}
+        onError={() => setImg(fallback)}
+        className={`w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-all duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+      />
+      <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 p-4">
+        <span className="text-white text-base font-bold drop-shadow">{name}</span>
+      </div>
+    </div>
+  )
+}
 
 function StarRating({ rating, onClick }) {
   return (
@@ -20,31 +66,6 @@ function StarRating({ rating, onClick }) {
     </div>
   )
 }
-
-function DynamicCityCard({ name, onClick }) {
-  const [img, setImg] = useState('https://wsrv.nl/?url=images.unsplash.com/photo-1436491865332-7a61a109cc05%3Fw%3D600%26q%3D80')
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    api.get(`/images/search?q=${name}`)
-      .then(res => {
-        if (res.data.imageUrl) setImg(res.data.imageUrl)
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false))
-  }, [name])
-
-  return (
-    <div onClick={onClick} className="cursor-pointer rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all relative group bg-gray-200" style={{ minHeight: '160px' }}>
-      {!loading && <img src={img} alt={name} className="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500" />}
-      <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 p-4">
-        <span className="text-white text-base font-bold drop-shadow">{name}</span>
-      </div>
-    </div>
-  )
-}
-
 
 export default function Home() {
   const navigate = useNavigate()
@@ -129,7 +150,7 @@ export default function Home() {
 
               {/* Floating place card */}
               <div className="absolute bottom-16 left-4 w-40 bg-white rounded-xl shadow-md overflow-hidden animate-float-medium border border-gray-100">
-                <img src="https://images.unsplash.com/photo-1587922546307-776227941871?w=200&q=80" alt="Goa" className="w-full h-20 object-cover" />
+                <img src="https://wsrv.nl/?url=images.unsplash.com/photo-1512343879784-a960bf40e7f2%3Fw%3D200%26q%3D80" alt="Goa" className="w-full h-20 object-cover" />
                 <div className="p-2">
                   <p className="text-xs font-bold text-gray-800">Baga Beach, Goa</p>
                   <p className="text-xs text-gray-400">Top attraction</p>
@@ -155,7 +176,7 @@ export default function Home() {
               {[
                 { icon: '⚡', title: 'Live Price Engine', desc: 'Get real-time estimates for flights, trains, and buses — updated every time you select a route. Includes food and accommodation costs by day.' },
                 { icon: '🗺️', title: 'Interactive India Map', desc: 'Explore the entire map of India with 40+ cities. Click any city to instantly start planning a trip to it.' },
-                { icon: '🤖', title: 'AI Travel Assistant', desc: 'Chat with Voyara\'s AI travel assistant powered by Groq Llama. Get destination suggestions, packing tips, and more.' },
+                { icon: '🤖', title: 'AI Travel Assistant', desc: "Chat with Voyara's AI travel assistant powered by Groq Llama. Get destination suggestions, packing tips, and more." },
                 { icon: '📍', title: 'Nearby Attractions', desc: 'Every itinerary auto-populates with curated nearby places and day-by-day activities for your destination.' },
               ].map(f => (
                 <div key={f.title} className="flex gap-4 items-start">
@@ -185,7 +206,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {featuredCities.map(c => (
-              <DynamicCityCard key={c} name={c} onClick={() => navigate(`/planner?dest=${c}`)} />
+              <SmartCityCard key={c} name={c} onClick={() => navigate(`/planner?dest=${c}`)} />
             ))}
           </div>
         </div>
