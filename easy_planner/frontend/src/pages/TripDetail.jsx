@@ -364,7 +364,7 @@ export default function TripDetail() {
                           return (
                             <div key={hotel.name || i} className="flex flex-col md:flex-row gap-5 p-4 rounded-2xl border border-gray-100 hover:border-gray-200 bg-white hover:shadow-md transition-all group duration-300">
                               <div className="w-full md:w-44 h-36 rounded-xl overflow-hidden shrink-0 relative bg-gray-200">
-                                <img src={getHotelImage(hotel.name)} alt={hotel.name} className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500" />
+                                <DynamicImage query={`${hotel.name} ${trip.destination} exterior`} fallback={getHotelImage(hotel.name)} alt={hotel.name} className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500" />
                                 <span className="absolute top-2 left-2 bg-yellow-400 text-yellow-950 text-2xs font-bold px-2 py-0.5 rounded-md shadow-xs">★ {hotel.rating?.toFixed(1) || '4.5'}</span>
                               </div>
                               <div className="flex-1 flex flex-col justify-between">
@@ -422,7 +422,7 @@ export default function TripDetail() {
                         return (
                           <div key={rest.name || i} className="flex gap-4 p-4 rounded-2xl border border-gray-100 hover:border-gray-200 bg-white hover:shadow-md transition-all group duration-300">
                             <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden shrink-0 relative bg-gray-200">
-                              <img src={getRestaurantImage(rest.name)} alt={rest.name} className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500" />
+                              <DynamicImage query={`${rest.name} ${trip.destination} food interior`} fallback={getRestaurantImage(rest.name)} alt={rest.name} className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500" />
                               <span className="absolute bottom-1 right-1 bg-black/60 backdrop-blur-xs text-white text-3xs font-medium px-1.5 py-0.5 rounded-md">★ {rest.rating?.toFixed(1) || '4.3'}</span>
                             </div>
                             <div className="flex-1 flex flex-col justify-between min-w-0">

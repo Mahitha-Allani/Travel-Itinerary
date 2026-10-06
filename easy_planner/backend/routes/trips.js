@@ -209,7 +209,7 @@ Return 5 high-quality, popular, and diverse options for each. Do not include any
         { name: `Cafe Nirvana`, rating: 4.4, cuisine: "Continental & Italian Cafe", address: `Art District, ${city}`, description: "Cozy bohemian hideout serving artisanal espresso, wood-fired sourdough pizzas, and house pastas." }
       ]
     })
-    res.json(generateDynamicFallback(req.params.id ? 'Local' : 'Selected'))
+    res.json(generateDynamicFallback(destination))
   }
 })
 
