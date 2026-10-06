@@ -86,7 +86,7 @@ export default function Planner() {
     endDate: '',
     tripType: 'Solo',
   })
-  const [cost, setCost]           = useState(null)
+  const [baseCost, setBaseCost]   = useState(null)
   const [error, setError]         = useState('')
   const [success, setSuccess]     = useState(false)
   const [loading, setLoading]     = useState(false)
@@ -98,22 +98,39 @@ export default function Planner() {
 
   useEffect(() => {
     if (!form.source || !form.destination || form.source === form.destination) {
-      setCost(null); return
+      setBaseCost(null); return
     }
     setFetchingPrice(true)
     api.get(`/cities/costs?from=${form.source}&to=${form.destination}`)
       .then(({ data }) => {
         setTimeout(() => {
           const variance = Math.floor(Math.random() * 400) - 200
-          setCost({
+          setBaseCost({
             flight: data.flight !== 'N/A' ? data.flight + (variance * 2) : 'N/A',
             train:  data.train  !== 'N/A' ? data.train  + variance       : 'N/A',
             bus:    data.train  !== 'N/A' ? Math.floor(data.train * 0.7) + variance : 'N/A',
           })
           setFetchingPrice(false)
         }, 800)
-      }).catch(() => { setCost(null); setFetchingPrice(false) })
+      }).catch(() => { setBaseCost(null); setFetchingPrice(false) })
   }, [form.source, form.destination])
+
+  const getMultiplier = (type) => {
+    switch (type) {
+      case 'Friends': return 4;
+      case 'Family': return 4;
+      case 'Solo':
+      case 'Professional':
+      default: return 1;
+    }
+  }
+
+  const multiplier = getMultiplier(form.tripType)
+  const displayCost = baseCost ? {
+    flight: baseCost.flight !== 'N/A' ? baseCost.flight * multiplier : 'N/A',
+    train: baseCost.train !== 'N/A' ? baseCost.train * multiplier : 'N/A',
+    bus: baseCost.bus !== 'N/A' ? baseCost.bus * multiplier : 'N/A',
+  } : null;
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -217,11 +234,11 @@ export default function Planner() {
             </div>
 
             {/* Live Pricing */}
-            {(fetchingPrice || cost) && (
+            {(fetchingPrice || displayCost) && (
               <div className="px-6 py-4 bg-creme-50 border-b border-gray-100">
                 {fetchingPrice ? (
                   <p className="text-sm text-burgundy-600 font-medium animate-pulse">⚡ Fetching live prices...</p>
-                ) : cost && (
+                ) : displayCost && (
                   <div>
                     <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
                       Live Real-Time Prices
@@ -229,15 +246,15 @@ export default function Planner() {
                     <div className="flex gap-6 flex-wrap">
                       <div className="text-center">
                         <p className="text-xs text-gray-400 mb-0.5">✈ Flight</p>
-                        <p className="text-xl font-bold text-burgundy-600">{fmt(cost.flight)}</p>
+                        <p className="text-xl font-bold text-burgundy-600">{fmt(displayCost.flight)}</p>
                       </div>
                       <div className="text-center">
                         <p className="text-xs text-gray-400 mb-0.5">🚂 Train</p>
-                        <p className="text-xl font-bold text-burgundy-600">{fmt(cost.train)}</p>
+                        <p className="text-xl font-bold text-burgundy-600">{fmt(displayCost.train)}</p>
                       </div>
                       <div className="text-center">
                         <p className="text-xs text-gray-400 mb-0.5">🚌 Bus</p>
-                        <p className="text-xl font-bold text-burgundy-600">{fmt(cost.bus)}</p>
+                        <p className="text-xl font-bold text-burgundy-600">{fmt(displayCost.bus)}</p>
                       </div>
                     </div>
                   </div>
