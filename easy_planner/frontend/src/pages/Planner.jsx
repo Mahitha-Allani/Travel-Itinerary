@@ -15,7 +15,6 @@ const TRIP_TYPES = [
 function CityPicker({ label, value, onChange, cities, excludeCity }) {
   const [query, setQuery] = useState(value || '')
   const [open, setOpen] = useState(false)
-  const [photo, setPhoto] = useState(null)
   const ref = useRef(null)
 
   const filtered = cities.filter(c =>
@@ -25,12 +24,8 @@ function CityPicker({ label, value, onChange, cities, excludeCity }) {
   useEffect(() => {
     if (value) {
       setQuery(value)
-      api.get(`/cities/image?city=${encodeURIComponent(value)}`)
-        .then(({ data }) => setPhoto(data.imageUrl))
-        .catch(() => setPhoto(null))
     } else {
       setQuery('')
-      setPhoto(null)
     }
   }, [value])
 
@@ -49,13 +44,6 @@ function CityPicker({ label, value, onChange, cities, excludeCity }) {
   return (
     <div ref={ref} className="relative w-full">
       <p className="text-xs text-gray-400 mb-1.5">{label}</p>
-
-      {/* Photo banner */}
-      {photo && (
-        <div className="w-full h-20 rounded-xl overflow-hidden mb-2 shadow-sm border border-gray-100">
-          <img src={photo} alt={value} className="w-full h-full object-cover" />
-        </div>
-      )}
 
       <input
         type="text"
@@ -81,6 +69,10 @@ function CityPicker({ label, value, onChange, cities, excludeCity }) {
   )
 }
 
+const MAIN_CITIES = [
+  'Mumbai', 'Delhi', 'Jaipur', 'Agra', 'Goa', 'Kerala', 'Kolkata', 'Hyderabad', 'Agartala', 'Ahmedabad', 'Pune', 'Chennai', 'Bangalore'
+]
+
 export default function Planner() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -101,7 +93,7 @@ export default function Planner() {
   const [fetchingPrice, setFetchingPrice] = useState(false)
 
   useEffect(() => {
-    api.get('/cities').then(({ data }) => setCities(data)).catch(() => {})
+    setCities(MAIN_CITIES)
   }, [])
 
   useEffect(() => {
