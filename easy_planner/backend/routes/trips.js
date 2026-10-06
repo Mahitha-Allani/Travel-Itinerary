@@ -3,6 +3,7 @@ import Trip from '../models/Trip.js'
 import protect from '../middleware/auth.js'
 import cloudinary from '../utils/cloudinary.js'
 import { costs, nearbyPlaces, activities } from '../config/data.js'
+import { generateDynamicFallback } from '../config/fallbackExplore.js'
 
 const router = Router()
 
@@ -132,22 +133,6 @@ Return 5 high-quality, popular, and diverse options for each. Do not include any
 
     // Fallback if no keys are provided
     if (!groqKey && !openAIKey) {
-      const generateDynamicFallback = (city) => ({
-        hotels: [
-          { name: `${city} Taj Palace`, rating: 4.9, basePrice: 12500, address: `1 Apollo Bunder, Colaba, ${city}`, description: "An iconic luxury heritage hotel featuring breathtaking views and world-class hospitality." },
-          { name: `The Oberoi ${city}`, rating: 4.8, basePrice: 9800, address: `Nariman Point, ${city}`, description: "Sophisticated luxury with magnificent panoramic views of the city skyline." },
-          { name: `Hyatt Regency ${city}`, rating: 4.4, basePrice: 6200, address: `Sahar Airport Road, ${city}`, description: "Modern upscale business hotel offering contemporary rooms and exquisite dining." },
-          { name: `Ginger Hotel ${city}`, rating: 4.1, basePrice: 3100, address: `Near Main Station, ${city}`, description: "Comfortable and vibrant budget-friendly rooms designed for the modern smart traveler." },
-          { name: `Bloom Boutique ${city}`, rating: 4.3, basePrice: 4400, address: `Tourist District, ${city}`, description: "A chic boutique property with bright yellow accents and cozy minimalist interiors." }
-        ],
-        restaurants: [
-          { name: `${city} Spice Kitchen`, rating: 4.7, cuisine: "North Indian & Mughlai", address: `High Street, ${city}`, description: "Famous for its buttery dal makhani, rich curries, and warm clay-oven tandoori tikkas." },
-          { name: `Coastal Curries`, rating: 4.5, cuisine: "South Indian & Seafood", address: `Beachside Promenade, ${city}`, description: "Savor authentic regional coastal specialties, coconut-infused fish curries, and appams." },
-          { name: `The Golden Dragon`, rating: 4.6, cuisine: "Indo-Chinese Fusion", address: `Market Galleria, ${city}`, description: "A trendy dining destination offering delicious fiery chili paneer, hakka noodles, and steamed dim sums." },
-          { name: `Pure Veg Bistro`, rating: 4.3, cuisine: "Pure Vegetarian Thali", address: `Heritage Square, ${city}`, description: "A popular family joint serving massive traditional unlimited regional thalis with local ghee." },
-          { name: `Cafe Nirvana`, rating: 4.4, cuisine: "Continental & Italian Cafe", address: `Art District, ${city}`, description: "Cozy bohemian hideout serving artisanal espresso, wood-fired sourdough pizzas, and house pastas." }
-        ]
-      })
       return res.json(generateDynamicFallback(destination))
     }
 
@@ -193,22 +178,6 @@ Return 5 high-quality, popular, and diverse options for each. Do not include any
   } catch (err) {
     console.error('Explore API error:', err)
     // Dynamic fallback in case of API failure
-    const generateDynamicFallback = (city) => ({
-      hotels: [
-        { name: `${city} Taj Palace`, rating: 4.9, basePrice: 12500, address: `1 Apollo Bunder, Colaba, ${city}`, description: "An iconic luxury heritage hotel featuring breathtaking views and world-class hospitality." },
-        { name: `The Oberoi ${city}`, rating: 4.8, basePrice: 9800, address: `Nariman Point, ${city}`, description: "Sophisticated luxury with magnificent panoramic views of the city skyline." },
-        { name: `Hyatt Regency ${city}`, rating: 4.4, basePrice: 6200, address: `Sahar Airport Road, ${city}`, description: "Modern upscale business hotel offering contemporary rooms and exquisite dining." },
-        { name: `Ginger Hotel ${city}`, rating: 4.1, basePrice: 3100, address: `Near Main Station, ${city}`, description: "Comfortable and vibrant budget-friendly rooms designed for the modern smart traveler." },
-        { name: `Bloom Boutique ${city}`, rating: 4.3, basePrice: 4400, address: `Tourist District, ${city}`, description: "A chic boutique property with bright yellow accents and cozy minimalist interiors." }
-      ],
-      restaurants: [
-        { name: `${city} Spice Kitchen`, rating: 4.7, cuisine: "North Indian & Mughlai", address: `High Street, ${city}`, description: "Famous for its buttery dal makhani, rich curries, and warm clay-oven tandoori tikkas." },
-        { name: `Coastal Curries`, rating: 4.5, cuisine: "South Indian & Seafood", address: `Beachside Promenade, ${city}`, description: "Savor authentic regional coastal specialties, coconut-infused fish curries, and appams." },
-        { name: `The Golden Dragon`, rating: 4.6, cuisine: "Indo-Chinese Fusion", address: `Market Galleria, ${city}`, description: "A trendy dining destination offering delicious fiery chili paneer, hakka noodles, and steamed dim sums." },
-        { name: `Pure Veg Bistro`, rating: 4.3, cuisine: "Pure Vegetarian Thali", address: `Heritage Square, ${city}`, description: "A popular family joint serving massive traditional unlimited regional thalis with local ghee." },
-        { name: `Cafe Nirvana`, rating: 4.4, cuisine: "Continental & Italian Cafe", address: `Art District, ${city}`, description: "Cozy bohemian hideout serving artisanal espresso, wood-fired sourdough pizzas, and house pastas." }
-      ]
-    })
     res.json(generateDynamicFallback(destination))
   }
 })
