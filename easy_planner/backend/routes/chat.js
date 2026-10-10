@@ -60,44 +60,59 @@ router.post('/', async (req, res) => {
 
     let apiUrl = ''
     let apiKey = ''
-    let model = ''
+    let modelsToTry = []
 
     if (groqKey) {
       apiUrl = 'https://api.groq.com/openai/v1/chat/completions'
       apiKey = groqKey
-      model = 'llama-3.1-8b-instant'
+      modelsToTry = ['qwen/qwen3.8-27b', 'openai/gpt-oss-20b']
     } else {
       apiUrl = 'https://api.openai.com/v1/chat/completions'
       apiKey = openAIKey
-      model = 'gpt-3.5-turbo'
+      modelsToTry = ['gpt-3.5-turbo', 'gpt-4o-mini']
     }
 
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: model,
-        messages: messages,
-        temperature: 0.7,
-        max_tokens: 300
-      })
-    })
+    let reply = ''
+    let success = false
 
-    if (!response.ok) {
-      const errorData = await response.text()
-      throw new Error(`AI API Error: ${errorData}`)
+    for (const model of modelsToTry) {
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: messages,
+            temperature: 0.7,
+            max_tokens: 300
+          })
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          reply = data.choices[0]?.message?.content
+          if (reply) {
+            success = true
+            break
+          }
+        }
+      } catch (err) {
+        console.warn(`Model ${model} failed, trying fallback:`, err.message)
+      }
     }
 
-    const data = await response.json()
-    const reply = data.choices[0].message.content
+    if (!success || !reply) {
+      reply = getFallbackResponse(message)
+    }
 
     res.json({ reply })
   } catch (err) {
     console.error('Chat Error:', err)
-    res.status(500).json({ error: err.message || 'Failed to process chat' })
+    // Always fall back gracefully to local assistant response
+    res.json({ reply: getFallbackResponse(req.body.message || '') })
   }
 })
 

@@ -116,16 +116,16 @@ router.get('/:id/explore', async (req, res) => {
 
     let apiUrl = ''
     let apiKey = ''
-    let model = ''
+    let modelsToTry = []
 
     if (groqKey) {
       apiUrl = 'https://api.groq.com/openai/v1/chat/completions'
       apiKey = groqKey
-      model = 'llama-3.1-8b-instant'
+      modelsToTry = ['qwen/qwen3.8-27b', 'openai/gpt-oss-20b']
     } else {
       apiUrl = 'https://api.openai.com/v1/chat/completions'
       apiKey = openAIKey
-      model = 'gpt-3.5-turbo'
+      modelsToTry = ['gpt-3.5-turbo', 'gpt-4o-mini']
     }
 
     const systemPrompt = `You are a professional travel assistant. Return ONLY a raw JSON object and nothing else. Do not wrap in markdown code blocks, do not include any explanatory text. The response must be valid JSON with the following structure:
@@ -151,31 +151,44 @@ router.get('/:id/explore', async (req, res) => {
 }
 Return 5 high-quality, popular, and diverse options for each. Do not include any hardcoded booking or redirection website links.`
 
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: model,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Provide highly-rated popular hotels and restaurants in ${destination}, India.` }
-        ],
-        temperature: 0.2,
-        response_format: { type: "json_object" }
-      })
-    })
+    let parsed = null
+    for (const model of modelsToTry) {
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: `Provide highly-rated popular hotels and restaurants in ${destination}, India.` }
+            ],
+            temperature: 0.2,
+            response_format: { type: "json_object" }
+          })
+        })
 
-    if (!response.ok) {
-      throw new Error(`AI API failed: ${response.statusText}`)
+        if (response.ok) {
+          const data = await response.json()
+          const content = data.choices[0]?.message?.content
+          if (content) {
+            parsed = JSON.parse(content)
+            break
+          }
+        }
+      } catch (err) {
+        console.warn(`Model ${model} failed in explore API:`, err.message)
+      }
     }
 
-    const data = await response.json()
-    const content = data.choices[0].message.content
-    const parsed = JSON.parse(content)
-    res.json(parsed)
+    if (parsed) {
+      return res.json(parsed)
+    }
+
+    throw new Error('AI API returned empty or invalid response')
   } catch (err) {
     console.error('Explore API error:', err)
     // Always fall back to local curated data — destination is declared outside try so it's always in scope
