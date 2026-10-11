@@ -95,25 +95,53 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
 
-      {/* Hero */}
-      <section className="bg-linear-to-br from-burgundy-800 via-burgundy-700 to-pink-700 text-white py-20 sm:py-28 px-6 text-center relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at 20% 80%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)', backgroundSize: '60px 60px'}} />
-        <p className="text-white/60 text-xs tracking-widest uppercase mb-4">✈ Welcome to Voyara</p>
-        <h1 className="text-4xl sm:text-6xl font-bold mb-5 leading-tight">
-          Plan Your Perfect<br /><span className="text-yellow-300">Indian Journey</span>
-        </h1>
-        <p className="text-base sm:text-lg text-white/75 max-w-xl mx-auto mb-10">
-          Real-time pricing, interactive maps, AI trip assistant — everything you need for your next adventure.
-        </p>
-        <div className="flex flex-wrap gap-4 justify-center">
-          <button onClick={() => navigate('/planner')}
-            className="bg-white text-burgundy-700 font-bold px-8 py-3.5 rounded-xl hover:bg-yellow-50 shadow-xl transition">
-            Start Planning →
-          </button>
-          <button onClick={() => navigate('/map')}
-            className="border-2 border-white/40 text-white font-bold px-8 py-3.5 rounded-xl hover:bg-white/10 transition">
-            🗺 Explore Map
-          </button>
+      {/* Hero — Option 1: Cinematic Travel Panorama */}
+      <section className="relative py-24 sm:py-32 px-6 text-center text-white overflow-hidden bg-burgundy-950">
+        {/* Cinematic Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=2000&q=80')",
+          }}
+        />
+
+        {/* Gradient Overlay for high text contrast and brand tone */}
+        <div className="absolute inset-0 bg-gradient-to-b from-burgundy-950/85 via-burgundy-900/80 to-burgundy-950/95 backdrop-brightness-90" />
+
+        {/* Subtle decorative mesh */}
+        <div className="absolute inset-0 opacity-15 pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at 20% 80%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)', backgroundSize: '60px 60px'}} />
+
+        {/* Content Container */}
+        <div className="relative max-w-4xl mx-auto z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-xs font-semibold tracking-wider uppercase mb-6 shadow-sm">
+            <span>✈</span>
+            <span>Welcome to Voyara</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          </div>
+
+          <h1 className="text-4xl sm:text-6xl font-extrabold mb-6 leading-tight tracking-tight drop-shadow-md">
+            Plan Your Perfect<br />
+            <span className="bg-gradient-to-r from-yellow-200 via-amber-300 to-yellow-400 bg-clip-text text-transparent drop-shadow-sm">
+              Indian Journey
+            </span>
+          </h1>
+
+          <p className="text-base sm:text-lg text-white/85 max-w-2xl mx-auto mb-10 leading-relaxed font-normal drop-shadow">
+            Real-time pricing, interactive maps, AI trip assistant — everything you need for your next adventure.
+          </p>
+
+          <div className="flex flex-wrap gap-4 justify-center items-center">
+            <button 
+              onClick={() => navigate('/planner')}
+              className="bg-white text-burgundy-800 font-bold px-8 py-3.5 rounded-xl hover:bg-yellow-50 hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 shadow-xl">
+              Start Planning →
+            </button>
+            <button 
+              onClick={() => navigate('/map')}
+              className="bg-white/10 backdrop-blur-md border border-white/30 text-white font-bold px-8 py-3.5 rounded-xl hover:bg-white/20 hover:border-white/50 hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg">
+              🗺 Explore Map
+            </button>
+          </div>
         </div>
       </section>
 
