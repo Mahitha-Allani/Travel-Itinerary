@@ -102,20 +102,20 @@ export default function Itinerary() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#faf7f2] via-[#f7f2ea] to-[#f4ece1] relative overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#fcfbf9] via-[#f8f7f4] to-[#f4f3ef] relative overflow-hidden">
       <Navbar />
-      <TravelDoodleBg opacity="opacity-20" />
+      <TravelDoodleBg opacity="opacity-[0.05]" />
 
       <section className="flex-1 py-12 px-4 relative z-10">
         <div className="max-w-5xl mx-auto">
 
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-10">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 backdrop-blur-md border border-burgundy-200/60 text-burgundy-800 text-xs font-semibold mb-2 shadow-xs">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-burgundy-200/70 text-burgundy-900 text-xs font-semibold mb-2.5 shadow-xs">
                 <span>🧳</span> <span>Saved Journeys</span>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">Your Trips</h1>
-              <p className="text-gray-500 text-sm mt-1">{trips.length} {trips.length === 1 ? 'trip' : 'trips'} planned & ready to explore</p>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Your Trips</h1>
+              <p className="text-slate-600 font-normal text-sm sm:text-base mt-1">{trips.length} {trips.length === 1 ? 'trip' : 'trips'} planned & ready to explore</p>
             </div>
             <button onClick={() => navigate('/planner')}
               className="self-start bg-burgundy-600 hover:bg-burgundy-700 text-white text-sm font-bold px-6 py-3 rounded-2xl transition shadow-lg hover:shadow-xl hover:scale-105 active:scale-95">

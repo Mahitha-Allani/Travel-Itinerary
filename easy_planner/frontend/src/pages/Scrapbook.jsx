@@ -27,17 +27,17 @@ export default function Scrapbook() {
   }, [])
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#faf7f2] via-[#f7f2ea] to-[#f4ece1] relative overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#fcfbf9] via-[#f8f7f4] to-[#f4f3ef] relative overflow-hidden">
       <Navbar />
-      <TravelDoodleBg opacity="opacity-25" />
+      <TravelDoodleBg opacity="opacity-[0.05]" />
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 py-12 relative z-10">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/80 backdrop-blur-md border border-rose-200/60 text-rose-800 text-xs font-semibold mb-3 shadow-xs">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-rose-200/70 text-burgundy-900 text-xs font-semibold mb-3.5 shadow-xs">
             <span>📸</span> <span>Memory Keepsake & Travel Journal</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight mb-3">Travel Albums</h1>
-          <p className="text-gray-500 text-sm max-w-xl mx-auto">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2.5">Travel Albums</h1>
+          <p className="text-slate-600 font-normal text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
             Your personal collection of travel memories. Look back at the places you've been, the moments you've captured, and the stories you've written.
           </p>
         </div>

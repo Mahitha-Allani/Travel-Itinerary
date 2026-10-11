@@ -2,17 +2,18 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
 import Footer from '../components/Footer.jsx'
+import TravelDoodleBg from '../components/TravelDoodleBg.jsx'
 
 // Keeping a few major cities for quick links
 const topCities = [
-  { name: 'Mumbai', lat: 19.0760, lng: 72.8777 },
-  { name: 'Delhi', lat: 28.6139, lng: 77.2090 },
-  { name: 'Jaipur', lat: 26.9124, lng: 75.7873 },
-  { name: 'Agra', lat: 27.1767, lng: 78.0081 },
-  { name: 'Goa', lat: 15.2993, lng: 74.1240 },
-  { name: 'Kerala', lat:  9.9312, lng: 76.2673 },
-  { name: 'Kolkata', lat: 22.5726, lng: 88.3639 },
-  { name: 'Hyderabad',lat: 17.3850, lng: 78.4867 }
+  { name: 'Mumbai', lat: 19.0760, lng: 72.8777, tag: 'City of Dreams' },
+  { name: 'Delhi', lat: 28.6139, lng: 77.2090, tag: 'Capital Heritage' },
+  { name: 'Jaipur', lat: 26.9124, lng: 75.7873, tag: 'Pink City' },
+  { name: 'Agra', lat: 27.1767, lng: 78.0081, tag: 'Taj Mahal' },
+  { name: 'Goa', lat: 15.2993, lng: 74.1240, tag: 'Beaches & Vibes' },
+  { name: 'Kerala', lat:  9.9312, lng: 76.2673, tag: 'God’s Own Country' },
+  { name: 'Kolkata', lat: 22.5726, lng: 88.3639, tag: 'City of Joy' },
+  { name: 'Hyderabad',lat: 17.3850, lng: 78.4867, tag: 'City of Pearls' }
 ]
 
 export default function Map() {
@@ -75,33 +76,49 @@ export default function Map() {
   }, [])
 
   return (
-    <div className="min-h-screen flex flex-col bg-creme-50">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9] to-[#edf2f7] relative overflow-hidden">
       <Navbar />
+      <TravelDoodleBg opacity="opacity-[0.04]" />
 
-      <section className="flex-1 py-8 px-4">
+      <section className="flex-1 py-10 px-4 relative z-10">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+          {/* Header */}
+          <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-burgundy-600 mb-1">Explore All of India 🗺️</h2>
-              <p className="text-gray-500 text-sm">Select any of the main cities below or from the map to plan a trip.</p>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-slate-200/80 text-burgundy-900 text-xs font-semibold mb-3 shadow-xs">
+                <span>🧭</span> <span>Interactive Geographic Explorer</span>
+              </div>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Explore India 🗺️</h1>
+              <p className="text-slate-600 font-normal text-sm sm:text-base mt-1">Click any city pin to view live details, or jump straight to planning your route.</p>
             </div>
           </div>
 
-          <div
-            ref={mapRef}
-            className="rounded-2xl shadow-lg border border-creme-200 z-0 relative"
-            style={{ height: '520px', width: '100%' }}
-          />
+          {/* Map Frame */}
+          <div className="p-2 sm:p-3 bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/80 relative z-0">
+            <div
+              ref={mapRef}
+              className="rounded-2xl overflow-hidden shadow-inner"
+              style={{ height: '520px', width: '100%' }}
+            />
+          </div>
 
-          <div className="mt-8">
-            <h3 className="text-lg font-bold text-gray-800 mb-3">Popular Destinations</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {/* Quick-Jump Destinations */}
+          <div className="mt-10">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-extrabold text-slate-900">Popular Destinations</h3>
+              <span className="text-xs text-slate-500 font-medium">Click to focus on map</span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
               {topCities.map(city => (
                 <button key={city.name} onClick={() => {
                   mapInstance.current?.setView([city.lat, city.lng], 10)
                 }}
-                  className="bg-white rounded-xl px-4 py-3 text-sm font-semibold text-gray-700 border border-creme-200 hover:border-burgundy-400 hover:text-burgundy-600 transition text-left shadow-sm">
-                  📍 {city.name}
+                  className="bg-white/90 backdrop-blur-md rounded-2xl px-4 py-3 border border-slate-200/70 hover:border-burgundy-500 hover:text-burgundy-700 hover:shadow-md transition-all duration-200 text-left shadow-xs hover:-translate-y-0.5 group">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-800 group-hover:text-burgundy-700 text-sm">📍 {city.name}</span>
+                    <span className="text-slate-400 group-hover:text-burgundy-500 text-xs transition-transform group-hover:translate-x-0.5">→</span>
+                  </div>
+                  <p className="text-[11px] text-slate-500 mt-0.5 font-normal">{city.tag}</p>
                 </button>
               ))}
             </div>

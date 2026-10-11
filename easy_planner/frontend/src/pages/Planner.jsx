@@ -156,20 +156,20 @@ export default function Planner() {
   const fmt = v => v === 'N/A' ? 'N/A' : `₹${Number(v).toLocaleString('en-IN')}`
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#faf7f2] via-[#f7f2ea] to-[#f4ece1] relative overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#fcfbf9] via-[#f8f7f4] to-[#f4f3ef] relative overflow-hidden">
       <Navbar />
-      <TravelDoodleBg opacity="opacity-20" />
+      <TravelDoodleBg opacity="opacity-[0.05]" />
 
       <section className="flex-1 flex items-start justify-center py-12 sm:py-16 px-4 relative z-10">
         <div className="w-full max-w-2xl">
 
           {/* Page Title */}
           <div className="text-center mb-8 relative z-10">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/80 backdrop-blur-md border border-burgundy-200/60 text-burgundy-800 text-xs font-semibold mb-3 shadow-xs">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-burgundy-200/70 text-burgundy-900 text-xs font-semibold mb-3 shadow-xs">
               <span>✈️</span> <span>Personalized Itinerary Builder</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight mb-2">Plan a new trip</h1>
-            <p className="text-gray-500 text-sm max-w-md mx-auto">Choose your source & destination to get instant live fares for flights, trains, and buses.</p>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">Plan a new trip</h1>
+            <p className="text-slate-600 font-normal text-sm sm:text-base max-w-md mx-auto leading-relaxed">Choose your source & destination to get instant live fares for flights, trains, and buses.</p>
           </div>
 
           <form onSubmit={handleSubmit}
