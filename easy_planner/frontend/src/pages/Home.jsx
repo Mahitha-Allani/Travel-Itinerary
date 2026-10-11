@@ -95,33 +95,77 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
 
-      {/* Hero — Option 1: Cinematic Travel Panorama */}
-      <section className="relative py-24 sm:py-32 px-6 text-center text-white overflow-hidden bg-burgundy-950">
-        {/* Cinematic Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=2000&q=80')",
-          }}
-        />
+      {/* Hero — Idea 4: Gliding Paper Airplane & 3D Travel Badges (No Photos) */}
+      <section className="relative py-24 sm:py-32 px-6 text-center text-white overflow-hidden bg-gradient-to-br from-[#3b0a13] via-[#52101c] to-[#2c060d]">
+        {/* Soft Ambient Radial Glows */}
+        <div className="absolute -top-32 -left-32 w-[550px] h-[550px] rounded-full bg-gradient-to-br from-amber-400/15 via-rose-500/10 to-transparent blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 -right-32 w-[600px] h-[600px] rounded-full bg-gradient-to-bl from-burgundy-400/20 via-pink-500/10 to-transparent blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-32 left-1/3 w-[550px] h-[550px] rounded-full bg-gradient-to-tr from-amber-500/10 via-rose-600/10 to-transparent blur-3xl pointer-events-none" />
 
-        {/* Gradient Overlay for high text contrast and brand tone */}
-        <div className="absolute inset-0 bg-gradient-to-b from-burgundy-950/85 via-burgundy-900/80 to-burgundy-950/95 backdrop-brightness-90" />
+        {/* Subtle geometric dot grid pattern */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at 20% 80%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)', backgroundSize: '50px 50px'}} />
 
-        {/* Subtle decorative mesh */}
-        <div className="absolute inset-0 opacity-15 pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at 20% 80%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)', backgroundSize: '60px 60px'}} />
+        {/* Animated Flight Trajectory & SVG Paper Airplane */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <svg className="w-full h-full opacity-30" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1200 600">
+            <path d="M -100 450 Q 300 200 600 350 T 1300 150" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="2" strokeDasharray="8 8" />
+            <path d="M 100 550 Q 500 450 850 200" fill="none" stroke="rgba(251,191,36,0.5)" strokeWidth="1.5" strokeDasharray="5 5" />
+          </svg>
+
+          {/* Gliding Origami 3D Paper Airplane */}
+          <div className="absolute top-14 right-1/4 sm:right-1/3 animate-plane-glide select-none">
+            <svg width="84" height="84" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-2xl">
+              {/* Paper airplane body facets with 3D origami shading */}
+              <polygon points="10,50 90,20 45,65" fill="#fef08a" />
+              <polygon points="45,65 90,20 55,85" fill="#fde047" />
+              <polygon points="55,85 50,60 45,65" fill="#eab308" />
+              <polygon points="10,50 45,65 50,60" fill="#ca8a04" opacity="0.4" />
+            </svg>
+          </div>
+        </div>
+
+        {/* Floating Travel Badges orbiting around Hero (Desktop / Tablet) */}
+        <div className="absolute top-28 left-6 sm:left-12 hidden lg:flex items-center gap-3 p-3.5 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl animate-float-slow rotate-[-5deg]">
+          <div className="w-10 h-10 rounded-xl bg-amber-400/20 border border-amber-300/40 flex items-center justify-center text-xl">
+            🧳
+          </div>
+          <div className="text-left">
+            <p className="text-xs font-bold text-white">Smart Fare Estimator</p>
+            <p className="text-[10px] text-white/70">Flights · Trains · Buses</p>
+          </div>
+        </div>
+
+        <div className="absolute top-24 right-6 sm:right-12 hidden lg:flex items-center gap-3 p-3.5 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl animate-float-slow rotate-[5deg]" style={{ animationDelay: '1.5s' }}>
+          <div className="w-10 h-10 rounded-xl bg-pink-400/20 border border-pink-300/40 flex items-center justify-center text-xl">
+            🤖
+          </div>
+          <div className="text-left">
+            <p className="text-xs font-bold text-white">Voyara AI Assistant</p>
+            <p className="text-[10px] text-white/70">Day-by-day plans in seconds</p>
+          </div>
+        </div>
+
+        <div className="absolute bottom-16 left-16 hidden xl:flex items-center gap-2.5 px-4 py-2 rounded-xl bg-white/10 backdrop-blur-lg border border-white/15 text-white/90 text-xs shadow-xl animate-float-slow" style={{ animationDelay: '2.5s' }}>
+          <span className="text-sm">📍</span>
+          <span className="font-semibold text-xs">50+ Destinations Across India</span>
+        </div>
+
+        <div className="absolute bottom-16 right-16 hidden xl:flex items-center gap-2.5 px-4 py-2 rounded-xl bg-white/10 backdrop-blur-lg border border-white/15 text-white/90 text-xs shadow-xl animate-float-slow" style={{ animationDelay: '3.5s' }}>
+          <span className="text-amber-300 text-sm">★★★★★</span>
+          <span className="font-semibold text-xs">4.9 / 5 Traveler Rating</span>
+        </div>
 
         {/* Content Container */}
         <div className="relative max-w-4xl mx-auto z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-xs font-semibold tracking-wider uppercase mb-6 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white/90 text-xs font-semibold tracking-wider uppercase mb-6 shadow-sm">
             <span>✈</span>
             <span>Welcome to Voyara</span>
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl font-extrabold mb-6 leading-tight tracking-tight drop-shadow-md">
+          <h1 className="text-4xl sm:text-6xl font-extrabold mb-6 leading-tight tracking-tight drop-shadow-lg">
             Plan Your Perfect<br />
-            <span className="bg-gradient-to-r from-yellow-200 via-amber-300 to-yellow-400 bg-clip-text text-transparent drop-shadow-sm">
+            <span className="bg-gradient-to-r from-yellow-200 via-amber-300 to-yellow-400 bg-clip-text text-transparent drop-shadow-md">
               Indian Journey
             </span>
           </h1>
@@ -133,12 +177,12 @@ export default function Home() {
           <div className="flex flex-wrap gap-4 justify-center items-center">
             <button 
               onClick={() => navigate('/planner')}
-              className="bg-white text-burgundy-800 font-bold px-8 py-3.5 rounded-xl hover:bg-yellow-50 hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 shadow-xl">
+              className="bg-white text-burgundy-900 font-bold px-8 py-3.5 rounded-2xl hover:bg-yellow-50 hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 shadow-xl">
               Start Planning →
             </button>
             <button 
               onClick={() => navigate('/map')}
-              className="bg-white/10 backdrop-blur-md border border-white/30 text-white font-bold px-8 py-3.5 rounded-xl hover:bg-white/20 hover:border-white/50 hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg">
+              className="bg-white/15 backdrop-blur-md border border-white/30 text-white font-bold px-8 py-3.5 rounded-2xl hover:bg-white/25 hover:border-white/50 hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg">
               🗺 Explore Map
             </button>
           </div>
