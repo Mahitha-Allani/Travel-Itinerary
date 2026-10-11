@@ -62,14 +62,16 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden border-t border-gray-100 px-4 py-3 flex flex-col gap-3 bg-white">
-          {navLink('/home',      'Home')}
-          {navLink('/planner',   'Plan Your Trip')}
-          {navLink('/itinerary', 'Your Itinerary')}
-          {navLink('/map',       '🗺️ Map')}
+        <div className="md:hidden border-t border-gray-100 px-5 py-4 flex flex-col gap-3.5 bg-white/95 backdrop-blur-xl shadow-xl">
+          {navLink('/home',      '🏠 Home')}
+          {navLink('/planner',   '✈️ Plan Your Trip')}
+          {navLink('/itinerary', '🧳 Your Itinerary')}
+          {navLink('/map',       '🗺️ Map Explorer')}
           {navLink('/scrapbooks','📸 Scrapbooks')}
-          {navLink('/profile',   'Profile')}
-          <button onClick={logout} className="text-sm text-left text-red-400 hover:text-red-600">Logout</button>
+          {navLink('/profile',   '👤 Profile')}
+          <button onClick={logout} className="text-sm font-semibold text-left text-red-500 hover:text-red-700 pt-2 border-t border-gray-100">
+            🚪 Logout
+          </button>
         </div>
       )}
     </nav>

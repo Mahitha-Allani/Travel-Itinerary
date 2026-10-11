@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
+import TravelDoodleBg from '../components/TravelDoodleBg.jsx'
 import api from '../api/axios.js'
 
 const defaultImg = 'https://wsrv.nl/?url=images.unsplash.com/photo-1436491865332-7a61a109cc05%3Fw%3D1200%26q%3D80' // Neutral airplane/travel background
@@ -147,65 +148,69 @@ export default function TripDetail() {
     : `${trip.days} day${trip.days !== 1 ? 's' : ''}`
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-[#fcfbf9] via-[#f8f7f4] to-[#f4f3ef] flex flex-col relative overflow-hidden">
       <Navbar />
+      <TravelDoodleBg opacity="opacity-[0.04]" />
 
       {/* Hero Banner */}
-      <div className="relative h-72 sm:h-96 w-full shrink-0">
+      <div className="relative h-64 sm:h-80 md:h-96 w-full shrink-0 z-0">
         <DynamicImage query={trip.destination} alt={trip.destination} className="w-full h-full object-cover" />
 
-        <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
         <button onClick={() => navigate('/itinerary')}
-          className="absolute top-6 left-6 bg-white/20 backdrop-blur-sm text-white text-sm font-semibold px-4 py-2 rounded-full hover:bg-white/30 transition cursor-pointer">
-          ← Back
+          className="absolute top-5 sm:top-6 left-4 sm:left-6 bg-white/20 backdrop-blur-md text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-full hover:bg-white/35 transition cursor-pointer flex items-center gap-1.5 shadow-md">
+          <span>←</span> <span>Back to Itineraries</span>
         </button>
       </div>
 
       {/* Content */}
-      <div className="max-w-4xl w-full mx-auto px-4 sm:px-6 -mt-20 relative z-10 pb-20 flex-1">
+      <div className="max-w-4xl w-full mx-auto px-3.5 sm:px-6 -mt-16 sm:-mt-20 relative z-10 pb-20 flex-1">
 
         {/* Floating Title Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 mb-6 border border-gray-100">
+        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-xl p-5 sm:p-8 mb-6 border border-white/80">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-burgundy-50 text-burgundy-800 text-[11px] font-semibold mb-2">
+                <span>📍</span> <span>Saved Destination</span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-1.5 tracking-tight">
                 Trip to {trip.destination}
               </h1>
-              <div className="flex flex-wrap items-center gap-2 text-gray-500 text-sm">
+              <div className="flex flex-wrap items-center gap-2 text-slate-500 text-xs sm:text-sm">
                 <span>📅 {dateStr}</span>
                 <span>·</span>
                 <span>{tripTypeIcon[trip.tripType] || '🧳'} {trip.tripType || 'Solo'}</span>
                 <span>·</span>
-                <span>📍 {trip.source} → {trip.destination}</span>
+                <span>{trip.source} → {trip.destination}</span>
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <a href="https://www.airindia.com/" target="_blank" rel="noreferrer"
-                className="bg-burgundy-600 hover:bg-burgundy-750 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs flex items-center">
+                className="bg-burgundy-600 hover:bg-burgundy-700 text-white text-xs font-bold px-3.5 sm:px-4 py-2 rounded-xl transition shadow-xs flex items-center gap-1 hover:scale-105 active:scale-95">
                 ✈ AirIndia
               </a>
               <a href="https://www.irctc.co.in/nget/" target="_blank" rel="noreferrer"
-                className="bg-burgundy-600 hover:bg-burgundy-750 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs flex items-center">                
+                className="bg-burgundy-600 hover:bg-burgundy-700 text-white text-xs font-bold px-3.5 sm:px-4 py-2 rounded-xl transition shadow-xs flex items-center gap-1 hover:scale-105 active:scale-95">                
                 🚂 IRCTC
               </a>
               <a href={`https://www.redbus.in/bus-tickets/${trip.source?.toLowerCase()}-to-${trip.destination?.toLowerCase()}`} target="_blank" rel="noreferrer"
-                className="bg-burgundy-600 hover:bg-burgundy-750 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs flex items-center">
+                className="bg-burgundy-600 hover:bg-burgundy-700 text-white text-xs font-bold px-3.5 sm:px-4 py-2 rounded-xl transition shadow-xs flex items-center gap-1 hover:scale-105 active:scale-95">
                 🚌 RedBus
               </a>
             </div>
           </div>
 
           {/* Cost Pills */}
-          <div className="flex flex-wrap gap-2 mt-5 pt-5 border-t border-gray-100">
-            <span className="px-3 py-1.5 bg-burgundy-50 text-burgundy-700 border border-burgundy-100 rounded-full text-xs font-semibold">✈ Flight: {fmt(trip.cost?.flight)}</span>
-            <span className="px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-100 rounded-full text-xs font-semibold">🚂 Train: {fmt(trip.cost?.train)}</span>
-            <span className="px-3 py-1.5 bg-green-50 text-green-700 border border-green-100 rounded-full text-xs font-semibold">🚌 Bus: {fmt(trip.cost?.bus)}</span>
+          <div className="flex flex-wrap gap-2 mt-5 pt-5 border-t border-slate-100">
+            <span className="px-3 py-1.5 bg-rose-50 text-rose-700 border border-rose-100 rounded-xl text-xs font-semibold">✈ Flight: {fmt(trip.cost?.flight)}</span>
+            <span className="px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-100 rounded-xl text-xs font-semibold">🚂 Train: {fmt(trip.cost?.train)}</span>
+            <span className="px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-xl text-xs font-semibold">🚌 Bus: {fmt(trip.cost?.bus)}</span>
           </div>
         </div>
 
         {/* Explore Places */}
         {trip.places?.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 mb-6 border border-gray-50">
+          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-md p-5 sm:p-8 mb-6 border border-white/80">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-bold text-gray-900">📍 Explore {trip.destination}</h2>
               <span className="text-xs text-gray-400">{trip.places.length} spots</span>

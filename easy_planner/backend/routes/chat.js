@@ -9,9 +9,59 @@ CRITICAL RULES:
 1. Keep your responses EXTREMELY short and conversational (maximum 2-3 sentences).
 2. Do NOT use markdown formatting (no bold **, no asterisks, no lists). Use plain text only.
 3. If the user asks about booking, tell them they can book flights, trains, and buses directly from their saved itineraries.
-4. IMPORTANT: If the user asks to save the trip, add it, or says "save it", "save this", "save", "add to itinerary", or "create and save", you must output a friendly confirmation message and append EXACTLY this JSON block on a new line at the very end of your response:
-{"action": "save_trip", "destination": "City Name", "days": 3}
-(Choose the destination and duration based on the active conversation history. For example, if they just asked about Goa, destination should be "Goa".)`
+4. TRIP CREATION & SAVING (MANDATORY):
+Whenever:
+- The user asks to create, plan, or save an itinerary (e.g., "create an itinerary for hyd to delhi for 3 days", "save a trip to Goa", "plan a trip to Delhi"), OR
+- You ask "Want me to save this itinerary for you?" and the user answers "yes", "sure", "yeah", "ok", "please", "confirm", "save it",
+YOU MUST ALWAYS confirm friendly AND append EXACTLY this JSON block on a new line at the very end of your response:
+{"action": "save_trip", "source": "Source City", "destination": "Destination City", "days": Number}
+Example:
+{"action": "save_trip", "source": "Hyderabad", "destination": "Delhi", "days": 3}
+Never forget this JSON block when saving or creating a trip!`
+
+function ensureActionBlock(reply, message, history) {
+  if (reply.includes('"action": "save_trip"') || reply.includes('"action":"save_trip"')) {
+    return reply
+  }
+
+  const msgLower = (message || '').toLowerCase()
+  const replyLower = reply.toLowerCase()
+  const fullConvo = [...(history || []).map(h => h.text || h.content || ''), message].join(' ').toLowerCase()
+
+  const isSavingIntent = 
+    msgLower.includes('yes') || msgLower.includes('save') || msgLower.includes('add') || msgLower.includes('create') || msgLower.includes('sure') || msgLower.includes('please') ||
+    replyLower.includes('saved') || replyLower.includes('saved your trip') || replyLower.includes('itinerary is saved')
+
+  if (!isSavingIntent) return reply
+
+  const knownCities = ['Delhi', 'Mumbai', 'Goa', 'Jaipur', 'Agra', 'Hyderabad', 'Kerala', 'Kolkata', 'Chennai', 'Bangalore', 'Udaipur', 'Manali', 'Leh', 'Shimla', 'Rishikesh', 'Pune', 'Ahmedabad', 'Varanasi']
+  let destination = ''
+  let source = 'Mumbai'
+
+  for (const city of knownCities) {
+    const reg = new RegExp(`\\b${city}\\b`, 'i')
+    if (reg.test(fullConvo)) {
+      if (!destination) {
+        destination = city
+      } else if (!source || source === 'Mumbai') {
+        source = destination
+        destination = city
+      }
+    }
+  }
+
+  if (fullConvo.includes('hyd') && destination !== 'Hyderabad') source = 'Hyderabad'
+  if (fullConvo.includes('delhi')) destination = 'Delhi'
+  if (fullConvo.includes('hyd') && !destination) destination = 'Hyderabad'
+
+  if (!destination) return reply
+
+  let days = 3
+  const daysMatch = fullConvo.match(/(\d+)\s*(?:day|days)/)
+  if (daysMatch) days = parseInt(daysMatch[1]) || 3
+
+  return `${reply}\n{"action": "save_trip", "source": "${source}", "destination": "${destination}", "days": ${days}}`
+}
 
 function getFallbackResponse(message) {
   const msg = message.toLowerCase()
@@ -33,7 +83,7 @@ function getFallbackResponse(message) {
   if (msg.includes('help') || msg.includes('how')) {
     return "I can help you decide where to go! Just tell me what kind of vacation you like (e.g., beaches, mountains, historical), or use the interactive Map to explore."
   }
-  return "That sounds exciting! I am currently running in offline fallback mode because no AI API key was provided. Add an OPENAI_API_KEY or GROQ_API_KEY to the backend .env file to unlock my full brain!"
+  return "That sounds exciting! I am ready to help you plan your journey across India. Which city would you like to explore?"
 }
 
 // POST /api/chat
@@ -47,9 +97,9 @@ router.post('/', async (req, res) => {
 
     // Fallback if no keys are provided
     if (!groqKey && !openAIKey) {
-      // Simulate slight delay
-      await new Promise(r => setTimeout(r, 1000))
-      return res.json({ reply: getFallbackResponse(message) })
+      await new Promise(r => setTimeout(r, 800))
+      const fallbackReply = ensureActionBlock(getFallbackResponse(message), message, history)
+      return res.json({ reply: fallbackReply })
     }
 
     const messages = [
@@ -108,11 +158,13 @@ router.post('/', async (req, res) => {
       reply = getFallbackResponse(message)
     }
 
+    reply = ensureActionBlock(reply, message, history)
+
     res.json({ reply })
   } catch (err) {
     console.error('Chat Error:', err)
-    // Always fall back gracefully to local assistant response
-    res.json({ reply: getFallbackResponse(req.body.message || '') })
+    const safeFallback = ensureActionBlock(getFallbackResponse(req.body.message || ''), req.body.message, req.body.history)
+    res.json({ reply: safeFallback })
   }
 })
 

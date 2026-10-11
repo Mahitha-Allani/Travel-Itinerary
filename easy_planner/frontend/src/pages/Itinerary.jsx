@@ -86,11 +86,22 @@ export default function Itinerary() {
   const [loading, setLoading] = useState(true)
   const [error, setError]     = useState('')
 
-  useEffect(() => {
+  const loadTrips = () => {
     api.get('/trips')
       .then(({ data }) => setTrips(data))
       .catch(() => setError('Failed to load itineraries.'))
       .finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    loadTrips()
+
+    const handleRealtimeTripSaved = () => {
+      loadTrips()
+    }
+
+    window.addEventListener('trip-saved', handleRealtimeTripSaved)
+    return () => window.removeEventListener('trip-saved', handleRealtimeTripSaved)
   }, [])
 
   const handleDelete = async (id) => {
