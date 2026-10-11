@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
 import Footer from '../components/Footer.jsx'
+import TravelDoodleBg from '../components/TravelDoodleBg.jsx'
 import api from '../api/axios.js'
 
 const TRIP_TYPES = [
@@ -155,19 +156,24 @@ export default function Planner() {
   const fmt = v => v === 'N/A' ? 'N/A' : `₹${Number(v).toLocaleString('en-IN')}`
 
   return (
-    <div className="min-h-screen flex flex-col bg-creme-50">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#faf7f2] via-[#f7f2ea] to-[#f4ece1] relative overflow-hidden">
       <Navbar />
+      <TravelDoodleBg opacity="opacity-20" />
 
-      <section className="flex-1 flex items-start justify-center py-16 px-4">
+      <section className="flex-1 flex items-start justify-center py-12 sm:py-16 px-4 relative z-10">
         <div className="w-full max-w-2xl">
 
           {/* Page Title */}
-          <div className="text-center mb-10">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Plan a new trip</h1>
+          <div className="text-center mb-8 relative z-10">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/80 backdrop-blur-md border border-burgundy-200/60 text-burgundy-800 text-xs font-semibold mb-3 shadow-xs">
+              <span>✈️</span> <span>Personalized Itinerary Builder</span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight mb-2">Plan a new trip</h1>
+            <p className="text-gray-500 text-sm max-w-md mx-auto">Choose your source & destination to get instant live fares for flights, trains, and buses.</p>
           </div>
 
           <form onSubmit={handleSubmit}
-            className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+            className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/80 overflow-hidden relative z-10">
 
             {/* Destination */}
             <div className="p-6 border-b border-gray-100">

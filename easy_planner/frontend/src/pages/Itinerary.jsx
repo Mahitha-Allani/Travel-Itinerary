@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
 import Footer from '../components/Footer.jsx'
+import TravelDoodleBg from '../components/TravelDoodleBg.jsx'
 import api from '../api/axios.js'
 
 const cityImages = {
@@ -43,34 +44,36 @@ function TripCard({ trip, onDelete }) {
     : `${trip.days} day${trip.days !== 1 ? 's' : ''}`
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow group cursor-pointer"
+    <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-md border border-white/80 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 group cursor-pointer"
       onClick={() => navigate(`/trip/${trip._id}`)}>
       {/* Cover Image */}
-      <div className="relative h-44 overflow-hidden">
+      <div className="relative h-48 overflow-hidden">
         <img src={img} alt={trip.destination} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
         <button onClick={e => { e.stopPropagation(); onDelete(trip._id) }}
-          className="absolute top-3 right-3 w-7 h-7 bg-white/20 backdrop-blur-sm text-white rounded-full text-xs hover:bg-white/40 transition flex items-center justify-center">
+          className="absolute top-3 right-3 w-8 h-8 bg-black/30 backdrop-blur-md text-white rounded-full text-xs hover:bg-red-500 transition-colors flex items-center justify-center">
           ✕
         </button>
         <div className="absolute bottom-3 left-4">
-          <p className="text-white font-bold text-lg drop-shadow">{trip.destination}</p>
-          <p className="text-white/80 text-xs">{trip.source} → {trip.destination}</p>
+          <p className="text-white font-extrabold text-xl drop-shadow">{trip.destination}</p>
+          <p className="text-white/85 text-xs font-medium">{trip.source} → {trip.destination}</p>
         </div>
       </div>
 
       {/* Info */}
-      <div className="p-4">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2 text-sm text-gray-500">
+      <div className="p-5">
+        <div className="flex items-center justify-between mb-3.5">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-gray-500 bg-gray-100/80 px-2.5 py-1 rounded-full">
             <span>📅 {dateStr}</span>
           </div>
-          <span className="text-sm">{tripTypeIcon[trip.tripType] || '🧳'} {trip.tripType || 'Solo'}</span>
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-burgundy-50 text-burgundy-700">
+            {tripTypeIcon[trip.tripType] || '🧳'} {trip.tripType || 'Solo'}
+          </span>
         </div>
         <div className="flex gap-2 flex-wrap">
-          <span className="text-xs font-semibold bg-burgundy-50 text-burgundy-700 px-2.5 py-1 rounded-full">✈ {fmt(trip.cost?.flight)}</span>
-          <span className="text-xs font-semibold bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full">🚂 {fmt(trip.cost?.train)}</span>
-          <span className="text-xs font-semibold bg-green-50 text-green-700 px-2.5 py-1 rounded-full">🚌 {fmt(trip.cost?.bus)}</span>
+          <span className="text-xs font-bold bg-rose-50 text-rose-700 border border-rose-100 px-2.5 py-1 rounded-xl">✈ {fmt(trip.cost?.flight)}</span>
+          <span className="text-xs font-bold bg-blue-50 text-blue-700 border border-blue-100 px-2.5 py-1 rounded-xl">🚂 {fmt(trip.cost?.train)}</span>
+          <span className="text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 px-2.5 py-1 rounded-xl">🚌 {fmt(trip.cost?.bus)}</span>
         </div>
       </div>
     </div>
@@ -99,19 +102,23 @@ export default function Itinerary() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#faf7f2] via-[#f7f2ea] to-[#f4ece1] relative overflow-hidden">
       <Navbar />
+      <TravelDoodleBg opacity="opacity-20" />
 
-      <section className="flex-1 py-12 px-4">
+      <section className="flex-1 py-12 px-4 relative z-10">
         <div className="max-w-5xl mx-auto">
 
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-10">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">Your Trips</h1>
-              <p className="text-gray-400 text-sm">{trips.length} {trips.length === 1 ? 'trip' : 'trips'} planned</p>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 backdrop-blur-md border border-burgundy-200/60 text-burgundy-800 text-xs font-semibold mb-2 shadow-xs">
+                <span>🧳</span> <span>Saved Journeys</span>
+              </div>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">Your Trips</h1>
+              <p className="text-gray-500 text-sm mt-1">{trips.length} {trips.length === 1 ? 'trip' : 'trips'} planned & ready to explore</p>
             </div>
             <button onClick={() => navigate('/planner')}
-              className="self-start bg-burgundy-600 hover:bg-burgundy-700 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition shadow-sm">
+              className="self-start bg-burgundy-600 hover:bg-burgundy-700 text-white text-sm font-bold px-6 py-3 rounded-2xl transition shadow-lg hover:shadow-xl hover:scale-105 active:scale-95">
               + Plan new trip
             </button>
           </div>
@@ -120,18 +127,22 @@ export default function Itinerary() {
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
           {!loading && !error && trips.length === 0 && (
-            <div className="bg-white rounded-2xl p-16 text-center shadow-sm border border-gray-100">
-              <div className="text-6xl mb-4">🗺️</div>
-              <h3 className="text-xl font-bold text-gray-700 mb-2">No trips planned yet</h3>
-              <p className="text-gray-400 text-sm mb-6">Start exploring India with Voyara!</p>
+            <div className="bg-white/85 backdrop-blur-md rounded-3xl p-16 text-center shadow-xl border border-white/80 max-w-lg mx-auto">
+              <div className="w-20 h-20 mx-auto rounded-3xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-4xl mb-6 shadow-inner rotate-[-4deg]">
+                🗺️
+              </div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">No trips planned yet</h3>
+              <p className="text-gray-500 text-sm mb-8 leading-relaxed">
+                Your passport is waiting! Start planning your first Indian adventure with Voyara to see live fares, hotels, and custom day-by-day itineraries.
+              </p>
               <button onClick={() => navigate('/planner')}
-                className="bg-burgundy-600 text-white px-8 py-3 rounded-xl text-sm font-semibold hover:bg-burgundy-700 transition">
-                Plan Your First Trip
+                className="bg-burgundy-600 text-white px-8 py-3.5 rounded-2xl text-sm font-bold hover:bg-burgundy-700 transition shadow-lg hover:shadow-xl hover:scale-105">
+                Plan Your First Trip →
               </button>
             </div>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {trips.map(trip => (
               <TripCard key={trip._id} trip={trip} onDelete={handleDelete} />
             ))}
