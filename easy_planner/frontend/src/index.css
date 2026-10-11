@@ -3,6 +3,7 @@
 @theme {
   --font-sans: "Lato", sans-serif;
   --font-heading: "Playfair Display", serif;
+  --font-brand: "Outfit", sans-serif;
   
   --color-burgundy-50: #fcf6f6;
   --color-burgundy-100: #f7ecec;

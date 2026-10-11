@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 import api from '../api/axios.js'
 import GoogleAuthModal from '../components/GoogleAuthModal.jsx'
+import TravelDoodleBg from '../components/TravelDoodleBg.jsx'
 
 export default function Login() {
   const { login }  = useAuth()
@@ -34,14 +35,18 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-creme-50 flex flex-col">
-      <nav className="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
-        <Link to="/" className="text-lg font-bold text-burgundy-600">Voyara</Link>
-        <Link to="/register" className="text-sm font-semibold text-burgundy-600 hover:underline">Register</Link>
+    <div className="min-h-screen bg-gradient-to-b from-[#fcfbf9] via-[#f8f7f4] to-[#f4f3ef] flex flex-col relative overflow-hidden">
+      <TravelDoodleBg opacity="opacity-[0.05]" />
+      <nav className="bg-white/90 backdrop-blur-md shadow-xs px-6 py-4 flex justify-between items-center relative z-10 border-b border-slate-100">
+        <Link to="/" className="flex items-center gap-2 text-xl font-black tracking-tight text-burgundy-700 font-brand">
+          <span className="text-base">🧭</span>
+          <span>Voyara</span>
+        </Link>
+        <Link to="/register" className="text-sm font-bold text-burgundy-700 hover:underline">Register</Link>
       </nav>
 
-      <div className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
+      <div className="flex-1 flex items-center justify-center px-4 py-12 relative z-10">
+        <div className="bg-white/95 backdrop-blur-xl p-8 sm:p-9 rounded-3xl shadow-2xl w-full max-w-md border border-white/80">
           <h2 className="text-2xl font-bold text-burgundy-600 mb-6 text-center">Welcome Back</h2>
 
           {error && (

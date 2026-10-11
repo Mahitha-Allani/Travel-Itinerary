@@ -24,7 +24,10 @@ export default function Navbar() {
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
-        <Link to="/home" className="text-lg font-bold text-burgundy-600 shrink-0">Voyara</Link>
+        <Link to="/home" className="flex items-center gap-2 text-xl font-black tracking-tight text-burgundy-700 font-brand shrink-0">
+          <span className="text-base">🧭</span>
+          <span>Voyara</span>
+        </Link>
 
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-6">
