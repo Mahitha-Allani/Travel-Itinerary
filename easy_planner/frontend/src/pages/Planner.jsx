@@ -12,7 +12,7 @@ const TRIP_TYPES = [
   { value: 'Professional', icon: '💼', label: 'Professional' },
 ]
 
-// Searchable city picker with photo preview
+// Searchable city picker with custom typing and instant filtering
 function CityPicker({ label, value, onChange, cities, excludeCity }) {
   const [query, setQuery] = useState(value || '')
   const [open, setOpen] = useState(false)
@@ -20,14 +20,10 @@ function CityPicker({ label, value, onChange, cities, excludeCity }) {
 
   const filtered = cities.filter(c =>
     c !== excludeCity && c.toLowerCase().includes(query.toLowerCase())
-  ).slice(0, 50)
+  ).slice(0, 60)
 
   useEffect(() => {
-    if (value) {
-      setQuery(value)
-    } else {
-      setQuery('')
-    }
+    setQuery(value || '')
   }, [value])
 
   useEffect(() => {
@@ -42,36 +38,82 @@ function CityPicker({ label, value, onChange, cities, excludeCity }) {
     setOpen(false)
   }
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      if (filtered.length > 0) {
+        select(filtered[0])
+      } else if (query.trim()) {
+        select(query.trim())
+      }
+    }
+  }
+
+  const hasExactMatch = cities.some(c => c.toLowerCase() === query.trim().toLowerCase())
+
   return (
     <div ref={ref} className="relative w-full">
-      <p className="text-xs text-gray-400 mb-1.5">{label}</p>
+      <p className="text-xs text-gray-500 font-medium mb-1.5">{label}</p>
 
       <input
         type="text"
         value={query}
-        placeholder={`Search ${label === 'From' ? 'source' : 'destination'}...`}
+        placeholder={`Search or type ${label === 'From' ? 'source' : 'destination'}...`}
         autoComplete="off"
         onFocus={() => setOpen(true)}
-        onChange={e => { setQuery(e.target.value); onChange(''); setOpen(true) }}
-        className="w-full text-gray-800 text-sm font-medium bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-burgundy-300"
+        onChange={e => {
+          setQuery(e.target.value)
+          onChange(e.target.value)
+          setOpen(true)
+        }}
+        onKeyDown={handleKeyDown}
+        className="w-full text-gray-800 text-sm font-medium bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-burgundy-300 transition-all"
       />
 
-      {open && filtered.length > 0 && (
-        <div className="absolute z-50 top-full mt-1 left-0 right-0 bg-white border border-gray-100 rounded-xl shadow-xl max-h-48 overflow-y-auto">
+      {open && (filtered.length > 0 || (query.trim() && !hasExactMatch)) && (
+        <div className="absolute z-50 top-full mt-1 left-0 right-0 bg-white border border-gray-100 rounded-xl shadow-xl max-h-52 overflow-y-auto">
           {filtered.map(city => (
             <button key={city} type="button" onMouseDown={() => select(city)}
-              className="w-full text-left px-4 py-2.5 text-sm hover:bg-burgundy-50 hover:text-burgundy-700 transition-colors border-b border-gray-50 last:border-0">
-              📍 {city}
+              className="w-full text-left px-4 py-2 text-sm hover:bg-burgundy-50 hover:text-burgundy-700 transition-colors border-b border-gray-50 last:border-0 flex items-center gap-2">
+              <span className="text-xs">📍</span> <span>{city}</span>
             </button>
           ))}
+          {query.trim() && !hasExactMatch && (
+            <button
+              type="button"
+              onMouseDown={() => select(query.trim())}
+              className="w-full text-left px-4 py-2.5 text-xs font-semibold text-burgundy-700 bg-burgundy-50/70 hover:bg-burgundy-100 transition-colors flex items-center gap-2"
+            >
+              <span>✨</span> <span>Use custom location: "{query.trim()}"</span>
+            </button>
+          )}
         </div>
       )}
     </div>
   )
 }
 
-const MAIN_CITIES = [
-  'Mumbai', 'Delhi', 'Jaipur', 'Agra', 'Goa', 'Kerala', 'Kolkata', 'Hyderabad', 'Agartala', 'Ahmedabad', 'Pune', 'Chennai', 'Bangalore'
+const FALLBACK_CITIES = [
+  'Agartala', 'Agra', 'Ahmedabad', 'Ahmednagar', 'Aizawl', 'Ajmer', 'Akola', 'Aligarh', 'Allahabad (Prayagraj)',
+  'Alwar', 'Ambala', 'Amravati', 'Amritsar', 'Anantapur', 'Aurangabad', 'Bangalore', 'Bareilly',
+  'Belgaum', 'Bhavnagar', 'Bhilai', 'Bhiwandi', 'Bhopal', 'Bhubaneswar', 'Bikaner', 'Bilaspur',
+  'Chandigarh', 'Chennai', 'Coimbatore', 'Cuttack', 'Dahod', 'Daman', 'Davangere', 'Dehradun',
+  'Delhi', 'Dhanbad', 'Dharwad', 'Dibrugarh', 'Durgapur', 'Erode', 'Faridabad', 'Gandhinagar',
+  'Gangtok', 'Gaya', 'Ghaziabad', 'Goa', 'Gorakhpur', 'Gulbarga', 'Guntur', 'Gurgaon', 'Guwahati',
+  'Gwalior', 'Haridwar', 'Hubli', 'Hyderabad', 'Imphal', 'Indore', 'Itanagar', 'Jabalpur',
+  'Jaipur', 'Jalandhar', 'Jalgaon', 'Jammu', 'Jamnagar', 'Jamshedpur', 'Jodhpur', 'Jorhat',
+  'Junagadh', 'Kakinada', 'Kalyan', 'Kanpur', 'Karnal', 'Kochi', 'Kohima', 'Kolkata', 'Kollam',
+  'Kota', 'Kozhikode', 'Kumbakonam', 'Leh', 'Lucknow', 'Ludhiana', 'Madurai', 'Mangalore',
+  'Manali', 'Mathura', 'Meerut', 'Moradabad', 'Mumbai', 'Mussoorie', 'Mysore', 'Nagpur', 'Nashik',
+  'Navi Mumbai', 'Nellore', 'Noida', 'Ooty', 'Panchkula', 'Panipat', 'Patna', 'Pondicherry',
+  'Port Blair', 'Pune', 'Puri', 'Raipur', 'Rajkot', 'Rajahmundry', 'Ranchi', 'Rishikesh',
+  'Rohtak', 'Rourkela', 'Salem', 'Saharanpur', 'Shillong', 'Shimla', 'Siliguri', 'Silvassa',
+  'Solapur', 'Srinagar', 'Surat', 'Thane', 'Thiruvananthapuram', 'Thrissur', 'Tiruchirapalli',
+  'Tirunelveli', 'Tirupati', 'Udaipur', 'Ujjain', 'Vadodara', 'Varanasi', 'Vijayawada', 'Visakhapatnam',
+  'Vellore', 'Warangal', 'Darjeeling', 'Lakshadweep', 'Diu', 'Nainital', 'Munnar', 'Kodaikanal',
+  'Mahabaleshwar', 'Lonavla', 'Mahabalipuram', 'Hampi', 'Khajuraho', 'Andaman', 'Coorg',
+  'Jaisalmer', 'Pushkar', 'Mount Abu', 'Kasol', 'Spiti', 'Dharamshala', 'Chikmagalur', 'Wayanad',
+  'Alleppey', 'Kovalam', 'Varkala', 'Gokarna'
 ]
 
 export default function Planner() {
@@ -79,7 +121,7 @@ export default function Planner() {
   const [searchParams] = useSearchParams()
   const defaultDest = searchParams.get('dest') || ''
 
-  const [cities, setCities] = useState([])
+  const [cities, setCities] = useState(FALLBACK_CITIES)
   const [form, setForm] = useState({
     source: '',
     destination: defaultDest,
@@ -94,7 +136,15 @@ export default function Planner() {
   const [fetchingPrice, setFetchingPrice] = useState(false)
 
   useEffect(() => {
-    setCities(MAIN_CITIES)
+    api.get('/cities')
+      .then(({ data }) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setCities(data)
+        }
+      })
+      .catch(() => {
+        // Keeps FALLBACK_CITIES if backend unreachable
+      })
   }, [])
 
   useEffect(() => {
@@ -112,7 +162,7 @@ export default function Planner() {
             bus:    data.train  !== 'N/A' ? Math.floor(data.train * 0.7) + variance : 'N/A',
           })
           setFetchingPrice(false)
-        }, 800)
+        }, 600)
       }).catch(() => { setBaseCost(null); setFetchingPrice(false) })
   }, [form.source, form.destination])
 
@@ -241,28 +291,82 @@ export default function Planner() {
 
             {/* Live Pricing */}
             {(fetchingPrice || displayCost) && (
-              <div className="px-6 py-4 bg-creme-50 border-b border-gray-100">
+              <div className="px-6 py-5 bg-gradient-to-br from-burgundy-50/40 via-white to-amber-50/30 border-b border-gray-100">
                 {fetchingPrice ? (
-                  <p className="text-sm text-burgundy-600 font-medium animate-pulse">⚡ Fetching live prices...</p>
+                  <div className="flex items-center gap-2 text-burgundy-700 font-medium text-sm animate-pulse">
+                    <span>⚡</span>
+                    <span>Analyzing real-time route fares & tariffs...</span>
+                  </div>
                 ) : displayCost && (
                   <div>
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
-                      Live Real-Time Prices
-                    </p>
-                    <div className="flex gap-6 flex-wrap">
-                      <div className="text-center">
-                        <p className="text-xs text-gray-400 mb-0.5">✈ Flight</p>
-                        <p className="text-xl font-bold text-burgundy-600">{fmt(displayCost.flight)}</p>
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-xs font-bold text-burgundy-900 uppercase tracking-wider">
+                        Estimated Live Route Fares ({form.tripType})
+                      </p>
+                      <span className="text-[11px] font-medium text-slate-500 bg-white/80 px-2 py-0.5 rounded-md border border-gray-200">
+                        Dynamic tariff engine
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-3 mb-4">
+                      {/* Flight */}
+                      <div className="bg-white/80 rounded-2xl p-3 border border-burgundy-100/80 shadow-xs text-center flex flex-col justify-between">
+                        <div>
+                          <p className="text-xs text-slate-500 mb-0.5 font-medium">✈ Flight</p>
+                          <p className="text-lg sm:text-xl font-bold text-burgundy-700">{fmt(displayCost.flight)}</p>
+                        </div>
+                        {form.source && form.destination && (
+                          <a
+                            href={`https://www.google.com/travel/flights?q=flights+from+${encodeURIComponent(form.source)}+to+${encodeURIComponent(form.destination)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-2 text-[11px] font-semibold text-burgundy-600 hover:text-burgundy-800 bg-burgundy-50 hover:bg-burgundy-100 py-1 px-2 rounded-lg transition-colors inline-block"
+                          >
+                            Book Flights ↗
+                          </a>
+                        )}
                       </div>
-                      <div className="text-center">
-                        <p className="text-xs text-gray-400 mb-0.5">🚂 Train</p>
-                        <p className="text-xl font-bold text-burgundy-600">{fmt(displayCost.train)}</p>
+
+                      {/* Train */}
+                      <div className="bg-white/80 rounded-2xl p-3 border border-amber-100/80 shadow-xs text-center flex flex-col justify-between">
+                        <div>
+                          <p className="text-xs text-slate-500 mb-0.5 font-medium">🚂 Train</p>
+                          <p className="text-lg sm:text-xl font-bold text-amber-700">{fmt(displayCost.train)}</p>
+                        </div>
+                        {form.source && form.destination && (
+                          <a
+                            href="https://www.irctc.co.in/nget/train-search"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-2 text-[11px] font-semibold text-amber-700 hover:text-amber-900 bg-amber-50 hover:bg-amber-100 py-1 px-2 rounded-lg transition-colors inline-block"
+                          >
+                            IRCTC Trains ↗
+                          </a>
+                        )}
                       </div>
-                      <div className="text-center">
-                        <p className="text-xs text-gray-400 mb-0.5">🚌 Bus</p>
-                        <p className="text-xl font-bold text-burgundy-600">{fmt(displayCost.bus)}</p>
+
+                      {/* Bus */}
+                      <div className="bg-white/80 rounded-2xl p-3 border border-emerald-100/80 shadow-xs text-center flex flex-col justify-between">
+                        <div>
+                          <p className="text-xs text-slate-500 mb-0.5 font-medium">🚌 Bus</p>
+                          <p className="text-lg sm:text-xl font-bold text-emerald-700">{fmt(displayCost.bus)}</p>
+                        </div>
+                        {form.source && form.destination && (
+                          <a
+                            href={`https://www.redbus.in/bus-tickets/${encodeURIComponent(form.source.toLowerCase())}-to-${encodeURIComponent(form.destination.toLowerCase())}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-2 text-[11px] font-semibold text-emerald-700 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 py-1 px-2 rounded-lg transition-colors inline-block"
+                          >
+                            RedBus Buses ↗
+                          </a>
+                        )}
                       </div>
                     </div>
+
+                    <p className="text-[11px] text-slate-500 leading-relaxed">
+                      💡 <strong>Note on pricing:</strong> Voyara calculates dynamic baseline fares adjusted for route distance, group size ({form.tripType === 'Solo' ? '1 person' : form.tripType === 'Professional' ? '1 person' : '4 people'}), and seasonal demand. Direct booking links open real-time live seats on official portals.
+                    </p>
                   </div>
                 )}
               </div>
